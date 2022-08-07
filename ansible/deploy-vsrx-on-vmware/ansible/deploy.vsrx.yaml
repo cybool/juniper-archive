@@ -1,0 +1,84 @@
+# ---------------------------------------------------------------------------
+# Deploy vSRX
+# ---------------------------------------------------------------------------
+- hosts: "localhost"
+  connection: local
+  gather_facts: False
+  become: False
+  collections:
+    - juniper.device
+  tasks:
+
+   - name: Build our vSRX configuration
+     block:
+
+      - name: Create local directories
+        ansible.builtin.include_role:
+          name: build_directories
+
+      - name: Build routed vSRX configuration
+        ansible.builtin.include_role:
+          name: '{{ configuration_role }}'
+        loop:
+          - 'configuration/build/system'
+          - 'configuration/build/interfaces'
+          - 'configuration/build/protocols'
+          - 'configuration/build/policy_options'
+          - 'configuration/build/routing_options'
+          - 'configuration/build/security'
+          - 'configuration/build/vlans'
+        loop_control:
+          loop_var: configuration_role
+
+      - name: Assemble our vSRX parts
+        ansible.builtin.include_role:
+          name: configuration/assemble
+
+   - name: Deploy our vSRX firewall
+     block:
+
+      - name: "Create VM from template"
+        community.vmware.vmware_guest:
+          # define connection parameters
+          hostname: "{{ vcenter_hostname }}"
+          username: "{{ vcenter_username }}"
+          password: "{{ vcenter_password }}"
+          validate_certs: False
+
+          # define vCenter parameters
+          datacenter: "{{ datacenter }}"
+          state: present
+          folder: "{{ folder }}"
+          esxi_hostname: "{{ esxi_host }}"
+
+          # define VM specifics
+          template: "{{ template }}"
+          name: "{{ vm_name }}"
+          wait_for_ip_address: True
+
+        delegate_to: localhost
+        register: vsrx_details
+      
+      - name: Print details to screen
+        debug:
+          msg: "{{ vsrx_details }}"
+
+   - name: Apply our vSRX configuration
+     block:
+
+      - name: Apply configuration to firewall
+        juniper.device.config:
+          host: "{{ vsrx_details['instance']['ipv4'] }}"
+          load: merge
+          user: root
+          passwd: juniper123
+          # ssh_private_key_file: "{{ provider_info.ssh_private_key_file }}"
+          src: "config/{{ vm_name }}.conf"
+          timeout: 240
+        register: result
+        # when: is_diff is defined
+
+      - name: print any output diff to console
+        debug:
+          var: result.diff_lines
+        when: result.diff_lines is defined

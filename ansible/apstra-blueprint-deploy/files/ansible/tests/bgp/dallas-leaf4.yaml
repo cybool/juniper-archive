@@ -1,0 +1,47 @@
+tests_include:
+  - check_underlay_spine1
+  - check_underlay_spine2
+  - check_overlay_spine1
+  - check_overlay_spine2
+
+### ---------------------------------------------------------------------------------
+### Assert BGP adjacencies with dallas-spine1 for underlay and overlay are online
+### ---------------------------------------------------------------------------------
+check_underlay_spine1:
+  - command: show bgp neighbor 172.20.1.6
+
+  - item:
+      xpath: '//bgp-information/bgp-peer'
+      tests:
+        - is-equal: peer-state, Established
+          err: Underlay to dallas-spine1 in group {{post['peer-group']}} is in {{post['peer-state']}} State (Established expected)
+
+check_overlay_spine1:
+  - command: show bgp neighbor 10.255.1.0
+
+  - item:
+      xpath: '//bgp-information/bgp-peer'
+      tests:
+        - is-equal: peer-state, Established
+          err: Overlay to dallas-spine1 in group {{post['peer-group']}} is in {{post['peer-state']}} State (Established expected)
+
+### ---------------------------------------------------------------------------------
+### Assert BGP adjacencies with dallas-spine2 for underlay and overlay are online
+### ---------------------------------------------------------------------------------
+check_underlay_spine2:
+  - command: show bgp neighbor 172.20.1.14
+
+  - item:
+      xpath: '//bgp-information/bgp-peer'
+      tests:
+        - is-equal: peer-state, Established
+          err: Underlay to dallas-spine2 in group {{post['peer-group']}} is in {{post['peer-state']}} State (Established expected)
+
+check_overlay_spine2:
+  - command: show bgp neighbor 10.255.1.1
+
+  - item:
+      xpath: '//bgp-information/bgp-peer'
+      tests:
+        - is-equal: peer-state, Established
+          err: Overlay to dallas-spine2 in group {{post['peer-group']}} is in {{post['peer-state']}} State (Established expected)

@@ -1,0 +1,185 @@
+{
+  "format_version": "1.0",
+  "provider_schemas": {
+    "registry.terraform.io/cdot65/junos-ex-interfaces": {
+      "provider": {
+        "version": 0,
+        "block": {
+          "attributes": {
+            "host": {
+              "type": "string",
+              "description_kind": "plain",
+              "required": true
+            },
+            "password": {
+              "type": "string",
+              "description_kind": "plain",
+              "required": true
+            },
+            "port": {
+              "type": "number",
+              "description_kind": "plain",
+              "required": true
+            },
+            "sshkey": {
+              "type": "string",
+              "description_kind": "plain",
+              "required": true
+            },
+            "username": {
+              "type": "string",
+              "description_kind": "plain",
+              "required": true
+            }
+          },
+          "description_kind": "plain"
+        }
+      },
+      "resource_schemas": {
+        "junos-ex-interfaces_InterfacesInterfaceDescription": {
+          "version": 0,
+          "block": {
+            "attributes": {
+              "description": {
+                "type": "string",
+                "description": "xpath is: config.Groups.V_interface. Text description of interface",
+                "description_kind": "plain",
+                "optional": true
+              },
+              "id": {
+                "type": "string",
+                "description_kind": "plain",
+                "optional": true,
+                "computed": true
+              },
+              "name": {
+                "type": "string",
+                "description": "xpath is: config.Groups.V_interface",
+                "description_kind": "plain",
+                "optional": true
+              },
+              "resource_name": {
+                "type": "string",
+                "description_kind": "plain",
+                "required": true
+              }
+            },
+            "description_kind": "plain"
+          }
+        },
+        "junos-ex-interfaces_InterfacesInterfaceUnitFamilyEthernet__SwitchingInterface__Mode": {
+          "version": 0,
+          "block": {
+            "attributes": {
+              "id": {
+                "type": "string",
+                "description_kind": "plain",
+                "optional": true,
+                "computed": true
+              },
+              "interface__mode": {
+                "type": "string",
+                "description": "xpath is: config.Groups.V_interface.V_unit.V_ethernet__switching. Type of interface mode",
+                "description_kind": "plain",
+                "optional": true
+              },
+              "name": {
+                "type": "string",
+                "description": "xpath is: config.Groups.V_interface",
+                "description_kind": "plain",
+                "optional": true
+              },
+              "name__1": {
+                "type": "string",
+                "description": "xpath is: config.Groups.V_interface.V_unit",
+                "description_kind": "plain",
+                "optional": true
+              },
+              "resource_name": {
+                "type": "string",
+                "description_kind": "plain",
+                "required": true
+              }
+            },
+            "description_kind": "plain"
+          }
+        },
+        "junos-ex-interfaces_InterfacesInterfaceUnitFamilyEthernet__SwitchingVlanMembers": {
+          "version": 0,
+          "block": {
+            "attributes": {
+              "id": {
+                "type": "string",
+                "description_kind": "plain",
+                "optional": true,
+                "computed": true
+              },
+              "members": {
+                "type": "string",
+                "description": "xpath is: config.Groups.V_interface.V_unit.V_vlan. Membership for this interface (name or id)",
+                "description_kind": "plain",
+                "optional": true
+              },
+              "name": {
+                "type": "string",
+                "description": "xpath is: config.Groups.V_interface",
+                "description_kind": "plain",
+                "optional": true
+              },
+              "name__1": {
+                "type": "string",
+                "description": "xpath is: config.Groups.V_interface.V_unit",
+                "description_kind": "plain",
+                "optional": true
+              },
+              "resource_name": {
+                "type": "string",
+                "description_kind": "plain",
+                "required": true
+              }
+            },
+            "description_kind": "plain"
+          }
+        },
+        "junos-ex-interfaces_commit": {
+          "version": 0,
+          "block": {
+            "attributes": {
+              "id": {
+                "type": "string",
+                "description_kind": "plain",
+                "optional": true,
+                "computed": true
+              },
+              "resource_name": {
+                "type": "string",
+                "description_kind": "plain",
+                "required": true
+              }
+            },
+            "description_kind": "plain"
+          }
+        },
+        "junos-ex-interfaces_destroycommit": {
+          "version": 0,
+          "block": {
+            "attributes": {
+              "id": {
+                "type": "string",
+                "description_kind": "plain",
+                "optional": true,
+                "computed": true
+              },
+              "resource_name": {
+                "type": "string",
+                "description_kind": "plain",
+                "required": true
+              }
+            },
+            "description_kind": "plain"
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,7 @@
+ansible==6.1.*
+jsnapy
+junos-eznc
+jxmlease
+lxml
+xmltodict
+pyvmomi

@@ -1,0 +1,87 @@
+---
+### #################################################################
+### # CREATE EVERYTHING
+### #################################################################
+- hosts: localhost
+  gather_facts: False
+  become: False
+  connection: local
+  tasks:
+    ### #################################################################
+    ### # AUTHENTICATE AND RECEIVE AN API TOKEN FROM THE APSTRA SERVER
+    ### #################################################################
+    - name: retrieve an API token for our session
+      ansible.builtin.uri:
+        url: "https://{{ apstra.base_url }}/api/user/login"
+        method: POST
+        headers:
+          Content-Type: application/json
+        status_code: 201
+        validate_certs: False
+        body_format: json
+        body:
+          username: "{{ apstra.username }}"
+          password: "{{ apstra.password }}"
+      register: api_token
+
+    - name: create 'api_token' object by setting it equal to value in response
+      ansible.builtin.set_fact:
+        api_token: "{{ api_token.json.token }}"      
+
+    # #################################################
+    # ### CT WORK
+    # #################################################
+    - name: "### UPDATE CONNECTIVITY TEMPLATES"
+      ansible.builtin.uri:
+        url: "https://{{ apstra.base_url }}/api/blueprints/{{ blueprint_name }}/virtual-networks-batch"
+        validate_certs: False
+        headers:
+          AuthToken: "{{ api_token }}"
+        return_content: False
+        status_code: 201
+        method: POST
+        body:
+          virtual_networks:
+            - virtual_gateway_ipv4_enabled: true
+              vn_id: null
+              vn_type: vxlan
+              svi_ips:
+                - system_id: b2b1c4eb-3a01-495e-b32a-a4309fd51512
+                  ipv4_mode: enabled
+                  ipv4_addr: null
+                  ipv6_mode: disabled
+                  ipv6_addr: null
+                - system_id: c54c98d1-770f-441e-a6dd-6b99e41841d1
+                  ipv4_mode: enabled
+                  ipv4_addr: null
+                  ipv6_mode: disabled
+                  ipv6_addr: null
+                - system_id: 1627c86a-d410-4637-8901-78d8ab9415e5
+                  ipv4_mode: enabled
+                  ipv4_addr: null
+                  ipv6_mode: disabled
+                  ipv6_addr: null
+              virtual_gateway_ipv4: "{{ default_gateway_ip }}"
+              ipv6_subnet: null
+              bound_to:
+                - system_id: 09a5aa1d-70e3-4295-be43-cb2afe1359a0
+                  access_switch_node_ids: []
+                  vlan_id: "{{ vlan_id }}"
+                - system_id: 1627c86a-d410-4637-8901-78d8ab9415e5
+                  access_switch_node_ids: []
+                  vlan_id: "{{ vlan_id }}"
+              vni_ids: 
+                - 10111
+              virtual_gateway_ipv6: null
+              ipv4_subnet: "{{ ip_prefix_of_vlan }}"
+              rt_policy:
+                import_RTs: null
+                export_RTs: null
+              label: "{{ vlan_name }}"
+              ipv4_enabled: true
+              virtual_gateway_ipv6_enabled: false
+              ipv6_enabled: false
+              security_zone_id: "{{ routing_instance }}"
+              dhcp_service: dhcpServiceDisabled
+              create_policy_tagged: true
+        body_format: json

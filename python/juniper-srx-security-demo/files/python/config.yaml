@@ -1,0 +1,68 @@
+---
+inventory:
+  - name: "hdq-dfw-001"
+    ip: "192.168.105.10"
+  # - name: "hdq-ifw-001"
+  #   ip: "192.168.105.1"
+
+credentials:
+    username: "napalm"
+    password: "juniper123"
+    # sshkey: "/home/cdot/.ssh/id_rsa"
+
+configuration:
+    zones:
+      - name: "LAN"
+        interfaces:
+          - "ge-0/0/1.0"
+        inbound_traffic:
+            system_services:
+              - "all"
+            protocols:
+              - "all"
+        app_tracking: True
+
+      - name: "WAN"
+        interfaces:
+          - "ge-0/0/0.0"
+        inbound_traffic:
+            system_services:
+              - "all"
+            protocols:
+              - "all"
+        app_tracking: False
+
+    policies:
+      - name: "TRUST_UNTRUST"
+        zone_src: 
+          - "LAN"
+        zone_dst: 
+          - "WAN"
+        address_src:
+          - "any"
+        address_dst: 
+          - "any"
+        application: 
+          - "any"
+        action:
+          - "permit"
+        log: True
+
+    nat:
+      source:
+        ruleset:
+          - name: "DESKTOPS"
+            zone_src: 
+              - "LAN"
+            zone_dst: 
+              - "WAN"
+            rules:
+              - name: "UBUNTU_DESKTOPS"
+                address_src:
+                  - "0.0.0.0/0"
+                address_dst: 
+                  - "0.0.0.0/0"
+                application:
+                  - "any"
+                action:
+                  - "interface"

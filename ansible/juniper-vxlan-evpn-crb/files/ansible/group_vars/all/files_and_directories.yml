@@ -1,0 +1,45 @@
+---
+### -------------------------------------------------
+### DIRECTORIES TO BE USED IN JUNIPER_STANZA ROLES
+### -------------------------------------------------
+# directories to hold configuration files as they're generated
+temporary_directory: "/tmp/ansible/"
+build_directory: "{{ temporary_directory }}/{{ inventory_hostname }}"
+build_directory_temp: "{{ build_directory }}/tmp"
+build_directory_complete: "{{ build_directory }}/complete"
+build_completed_file: "{{ build_directory_complete }}/{{ inventory_hostname }}.conf"
+
+# completed configuration is stored in the project's local folder
+configuration_directory: "config"
+completed_config_file: "{{ configuration_directory }}/{{ inventory_hostname }}.conf"
+
+### -------------------------------------------------
+### BACKUP DIRECTORY FOR CONFIGS AND FACTS
+### -------------------------------------------------
+
+# directories to hold retreived configurations
+backup_directory: "/tmp/backup/{{ inventory_hostname }}"
+backup_facts_directory: "{{ backup_directory }}/facts"
+backup_config_directory: "{{ backup_directory }}/config"
+
+# backup configuration file
+backup_file: "{{ backup_config_directory }}/backup.conf"
+
+### -------------------------------------------------
+### BOOTSTRAP CONFIGS
+### -------------------------------------------------
+
+bootstrap_config_dir: "./bootstrap"
+bootstrap_config_file: "{{ bootstrap_config_dir }}/{{ inventory_hostname }}.conf"
+
+### -------------------------------------------------
+### CHANGE PYTHON ENVIRONMENT
+### -------------------------------------------------
+ansible_python_interpreter: "{{ ansible_playbook_python }}"
+
+### -------------------------------------------------
+### NETBOX WORK
+### -------------------------------------------------
+
+netbox_vars_directory: "./host_vars/{{ inventory_hostname }}"
+interface_yaml: "{{ netbox_vars_directory }}/interfaces.yml"

@@ -1,0 +1,13 @@
+apstra:
+  base_url: "3.15.137.68:21359"
+  username: "admin"
+  password: "LovableHornet7#"
+
+nautobot:
+  base_url: "192.168.103.71/api"
+  token: "abc123"
+
+slack:
+  base_url: "hooks.slack.com/services"
+  channel:
+    apstra: "abcd123/abcd123/abcd123"

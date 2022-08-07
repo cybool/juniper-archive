@@ -1,0 +1,49 @@
+  
+configuration:
+  protocols:
+
+    bgp:
+      group:
+
+        # ### OVERLAY
+        - name: "EVPN_FABRIC"
+          type: internal
+          cluster: 0.0.0.1
+          local_address: "{{ device.lo0.ipv4 }}"
+          family:
+            evpn:
+              signaling: null
+          neighbor:
+            - description: "pod1-leaf1"
+              name: 192.168.0.11
+            - description: "pod1-leaf2"
+              name: 192.168.0.12
+            - description: "pod1-leaf3"
+              name: 192.168.0.13
+            - description: "pod1-leaf4"
+              name: 192.168.0.14
+            - description: "pod1-leaf5"
+              name: 192.168.0.15
+            - description: "pod1-leaf6"
+              name: 192.168.0.16
+            - description: "pod1-leaf7"
+              name: 192.168.0.17
+            - description: "pod1-leaf8"
+              name: 192.168.0.18
+          # export: "reject-type5"
+          multipath: null
+          vpn_apply_export: null
+
+    # evpn:
+    #   encapsulation: "vxlan"
+    #   default_gateway: "no-gateway-community"
+    #   extended_vni_list:
+    #     - "5001"
+    #     - "5002"
+    #     - "5003"
+
+    # igmp_snooping:
+    #   vlan:
+    #     - name: "vlan_1"
+    #       interface: "ae11.0"
+    #       multicast_router_interface: null

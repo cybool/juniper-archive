@@ -1,0 +1,30 @@
+### ---------------------------------------------------------------------------
+### APPLY BOOTSTRAP CONFIGURATION TO DEVICES
+### ---------------------------------------------------------------------------
+- hosts: all
+  connection: local
+  gather_facts: False
+  become: False
+  collections: 
+    - juniper.device
+  tasks:
+    - name: "set config changes"
+      config:
+        user: "root"
+        passwd: "juniper123"
+        load: merge
+        format: 'set'
+        lines:
+          - 'set system host-name router1'
+
+    - name: Get ARP information using Junos PyEZ Table
+      table:        
+        user: "root"
+        passwd: "juniper123"
+        file: "arp.yaml"
+        path: "{{ playbook_dir }}"
+      register: result
+
+    - name: Print response
+      debug:
+        var: result

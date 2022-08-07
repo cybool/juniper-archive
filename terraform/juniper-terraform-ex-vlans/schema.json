@@ -1,0 +1,173 @@
+{
+  "format_version": "1.0",
+  "provider_schemas": {
+    "registry.terraform.io/cdot65/junos-ex-vlans": {
+      "provider": {
+        "version": 0,
+        "block": {
+          "attributes": {
+            "host": {
+              "type": "string",
+              "description_kind": "plain",
+              "required": true
+            },
+            "password": {
+              "type": "string",
+              "description_kind": "plain",
+              "required": true
+            },
+            "port": {
+              "type": "number",
+              "description_kind": "plain",
+              "required": true
+            },
+            "sshkey": {
+              "type": "string",
+              "description_kind": "plain",
+              "required": true
+            },
+            "username": {
+              "type": "string",
+              "description_kind": "plain",
+              "required": true
+            }
+          },
+          "description_kind": "plain"
+        }
+      },
+      "resource_schemas": {
+        "junos-ex-vlans_VlansVlanDescription": {
+          "version": 0,
+          "block": {
+            "attributes": {
+              "description": {
+                "type": "string",
+                "description": "xpath is: config.Groups.V_vlan. Text description of VLANs",
+                "description_kind": "plain",
+                "optional": true
+              },
+              "id": {
+                "type": "string",
+                "description_kind": "plain",
+                "optional": true,
+                "computed": true
+              },
+              "name": {
+                "type": "string",
+                "description": "xpath is: config.Groups.V_vlan",
+                "description_kind": "plain",
+                "optional": true
+              },
+              "resource_name": {
+                "type": "string",
+                "description_kind": "plain",
+                "required": true
+              }
+            },
+            "description_kind": "plain"
+          }
+        },
+        "junos-ex-vlans_VlansVlanL3__Interface": {
+          "version": 0,
+          "block": {
+            "attributes": {
+              "id": {
+                "type": "string",
+                "description_kind": "plain",
+                "optional": true,
+                "computed": true
+              },
+              "l3__interface": {
+                "type": "string",
+                "description": "xpath is: config.Groups.V_vlan. L3 interface name for this vlans",
+                "description_kind": "plain",
+                "optional": true
+              },
+              "name": {
+                "type": "string",
+                "description": "xpath is: config.Groups.V_vlan",
+                "description_kind": "plain",
+                "optional": true
+              },
+              "resource_name": {
+                "type": "string",
+                "description_kind": "plain",
+                "required": true
+              }
+            },
+            "description_kind": "plain"
+          }
+        },
+        "junos-ex-vlans_VlansVlanVlan__Id": {
+          "version": 0,
+          "block": {
+            "attributes": {
+              "id": {
+                "type": "string",
+                "description_kind": "plain",
+                "optional": true,
+                "computed": true
+              },
+              "name": {
+                "type": "string",
+                "description": "xpath is: config.Groups.V_vlan",
+                "description_kind": "plain",
+                "optional": true
+              },
+              "resource_name": {
+                "type": "string",
+                "description_kind": "plain",
+                "required": true
+              },
+              "vlan__id": {
+                "type": "string",
+                "description": "xpath is: config.Groups.V_vlan. IEEE 802.1q VLAN identifier for VLAN",
+                "description_kind": "plain",
+                "optional": true
+              }
+            },
+            "description_kind": "plain"
+          }
+        },
+        "junos-ex-vlans_commit": {
+          "version": 0,
+          "block": {
+            "attributes": {
+              "id": {
+                "type": "string",
+                "description_kind": "plain",
+                "optional": true,
+                "computed": true
+              },
+              "resource_name": {
+                "type": "string",
+                "description_kind": "plain",
+                "required": true
+              }
+            },
+            "description_kind": "plain"
+          }
+        },
+        "junos-ex-vlans_destroycommit": {
+          "version": 0,
+          "block": {
+            "attributes": {
+              "id": {
+                "type": "string",
+                "description_kind": "plain",
+                "optional": true,
+                "computed": true
+              },
+              "resource_name": {
+                "type": "string",
+                "description_kind": "plain",
+                "required": true
+              }
+            },
+            "description_kind": "plain"
+          }
+        }
+      }
+    }
+  }
+}

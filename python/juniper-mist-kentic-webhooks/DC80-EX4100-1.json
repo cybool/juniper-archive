@@ -1,0 +1,142 @@
+{
+  "adopted": true,
+  "managed": true,
+  "role": "access",
+  "notes": "",
+  "ip_config": {
+    "type": "dhcp",
+    "network": "default"
+  },
+  "oob_ip_config": {
+    "type": "dhcp",
+    "network": "default"
+  },
+  "networks": {},
+  "port_usages": {
+    "vlan1099": {
+      "name": "vlan1099",
+      "mode": "trunk",
+      "disabled": false,
+      "port_network": "default",
+      "voip_network": null,
+      "stp_edge": false,
+      "port_auth": null,
+      "all_networks": false,
+      "networks": ["vlan1099"],
+      "speed": "auto",
+      "duplex": "auto",
+      "mac_limit": 0,
+      "persist_mac": false,
+      "poe_disabled": false,
+      "enable_qos": false,
+      "storm_control": {},
+      "mtu": null
+    }
+  },
+  "additional_config_cmds": [
+    "delete firewall",
+    "set firewall family inet filter 1088-1099-police term drop from source-address 10.88.88.88/32",
+    "set firewall family inet filter 1088-1099-police term drop from destination-address 10.99.99.99/32",
+    "set firewall family inet filter 1088-1099-police term drop then policer vlan-policer",
+    "set firewall family inet filter 1099-1088 term 1 from source-address 10.99.99.99/32",
+    "set firewall family inet filter 1099-1088 term 1 from destination-address 10.88.88.88/32",
+    "set firewall family inet filter 1099-1088 term 1 then inline-monitoring-instance i1",
+    "set firewall family inet filter 1099-1088 term 1 then accept",
+    "",
+    "set firewall family inet filter sampling_filter_inet_1 term term_tcp then count counter_inet",
+    "set firewall family inet filter sampling_filter_inet_1 term term_tcp then inline-monitoring-instance i1",
+    "set firewall family inet filter sampling_filter_inet_1 term term_tcp then accept",
+    "",
+    "set firewall policer vlan-policer if-exceeding bandwidth-limit 10m",
+    "set firewall policer vlan-policer if-exceeding burst-size-limit 10m",
+    "set firewall policer vlan-policer then discard",
+    "",
+    "delete services inline-monitoring",
+    "set services inline-monitoring feature-profile p1 features ingress-drop-reason",
+    "set services inline-monitoring feature-profile p1 features queue-congestion-level",
+    "set services inline-monitoring feature-profile p1 features shared-pool-congestion",
+    "set services inline-monitoring feature-profile p1 features egress-drop-reason",
+    "set services inline-monitoring feature-profile p1 features security-enable",
+    "set services inline-monitoring template temp1 template-refresh-rate 10",
+    "set services inline-monitoring template temp1 template-id 32800",
+    "set services inline-monitoring template temp1 flow-inactive-timeout 10",
+    "set services inline-monitoring template temp1 flow-monitoring feature-profile p1",
+    "set services inline-monitoring instance i1 template-name temp1",
+    "set services inline-monitoring instance i1 collector c1 source-address 192.168.255.13",
+    "set services inline-monitoring instance i1 collector c1 destination-address 192.168.10.10",
+    "set services inline-monitoring instance i1 collector c1 destination-port 9995",
+    "",
+    "delete protocols sflow",
+    "",
+    "set interfaces irb.1099 family inet filter input sampling_filter_inet_1",
+    "delete interfaces irb.1099 family inet filter input 1099-1088",
+    "",
+    "",
+    "",
+    ""
+  ],
+  "router_id": "192.168.255.13",
+  "port_config": {
+    "ge-0/0/1, ge-0/0/11": {
+      "usage": "vlan1099",
+      "description": ""
+    },
+    "ge-0/0/2": {
+      "usage": "myaccess",
+      "description": ""
+    },
+    "xe-0/2/0, xe-0/2/3": {
+      "usage": "evpn_uplink",
+      "dynamic_usage": null,
+      "description": "",
+      "no_local_overwrite": false
+    }
+  },
+  "extra_routes": {
+    "192.168.10.0/24": {
+      "via": "10.255.240.8"
+    }
+  },
+  "evpn_config": {
+    "role": "access",
+    "evpn_id": 4,
+    "uplinks": ["b033a6114900", "c042d016afa0"],
+    "downlinks": []
+  },
+  "other_ip_configs": {
+    "vlan1033": {
+      "type": "static",
+      "ip": "10.33.33.2",
+      "netmask": "255.255.255.0"
+    },
+    "vlan1088": {
+      "type": "static",
+      "ip": "10.88.88.2",
+      "netmask": "255.255.255.0"
+    },
+    "vlan1099": {
+      "type": "static",
+      "ip": "10.99.99.2",
+      "netmask": "255.255.255.0"
+    }
+  },
+  "vrf_config": {
+    "enabled": true
+  },
+  "id": "00000000-0000-0000-1000-4c734f096300",
+  "name": "DC80-EX4100-1",
+  "site_id": "a16adfef-c5b3-4bfb-b6e7-0ebfedc38e01",
+  "org_id": "42875d19-0dfa-46a0-beca-04c4f8d56100",
+  "created_time": 1656097629,
+  "modified_time": 1657309763,
+  "map_id": null,
+  "mac": "4c734f096300",
+  "serial": "FD0822AN0021",
+  "model": "EX4100-24T",
+  "hw_rev": "",
+  "type": "switch",
+  "tag_uuid": "42875d19-0dfa-46a0-beca-04c4f8d56100",
+  "tag_id": 110338,
+  "evpntopo_id": "0ab45dea-0a04-4994-8bff-860f78a29aa3",
+  "deviceprofile_id": null
+}

@@ -1,0 +1,21 @@
+---
+  - hosts: "houston-ifw-01"
+    connection: local
+    gather_facts: false
+    become: false
+    collections:
+      - juniper.device
+    tasks:
+
+      - name: Execute a basic Junos software upgrade.
+        software:
+          username: root
+          passwd: juniper123
+          remote_package: "http://192.168.104.20:4200/packages/junos-srxsme-22.2R1.9.tgz"
+          reboot: true
+          validate: false
+        register: response
+
+      - name: Print the complete response.
+        debug:
+          var: response

@@ -1,0 +1,621 @@
+{
+  "format_version": "1.0",
+  "provider_schemas": {
+    "registry.terraform.io/cdot65/junos-ex-interfaces": {
+      "provider": {
+        "version": 0,
+        "block": {
+          "attributes": {
+            "host": {
+              "type": "string",
+              "description_kind": "plain",
+              "required": true
+            },
+            "password": {
+              "type": "string",
+              "description_kind": "plain",
+              "required": true
+            },
+            "port": {
+              "type": "number",
+              "description_kind": "plain",
+              "required": true
+            },
+            "sshkey": {
+              "type": "string",
+              "description_kind": "plain",
+              "required": true
+            },
+            "username": {
+              "type": "string",
+              "description_kind": "plain",
+              "required": true
+            }
+          },
+          "description_kind": "plain"
+        }
+      },
+      "resource_schemas": {
+        "junos-ex-interfaces_InterfacesInterfaceDescription": {
+          "version": 0,
+          "block": {
+            "attributes": {
+              "description": {
+                "type": "string",
+                "description": "xpath is: config.Groups.V_interface. Text description of interface",
+                "description_kind": "plain",
+                "optional": true
+              },
+              "id": {
+                "type": "string",
+                "description_kind": "plain",
+                "optional": true,
+                "computed": true
+              },
+              "name": {
+                "type": "string",
+                "description": "xpath is: config.Groups.V_interface",
+                "description_kind": "plain",
+                "optional": true
+              },
+              "resource_name": {
+                "type": "string",
+                "description_kind": "plain",
+                "required": true
+              }
+            },
+            "description_kind": "plain"
+          }
+        },
+        "junos-ex-interfaces_InterfacesInterfaceUnitFamilyEthernet__SwitchingInterface__Mode": {
+          "version": 0,
+          "block": {
+            "attributes": {
+              "id": {
+                "type": "string",
+                "description_kind": "plain",
+                "optional": true,
+                "computed": true
+              },
+              "interface__mode": {
+                "type": "string",
+                "description": "xpath is: config.Groups.V_interface.V_unit.V_ethernet__switching. Type of interface mode",
+                "description_kind": "plain",
+                "optional": true
+              },
+              "name": {
+                "type": "string",
+                "description": "xpath is: config.Groups.V_interface",
+                "description_kind": "plain",
+                "optional": true
+              },
+              "name__1": {
+                "type": "string",
+                "description": "xpath is: config.Groups.V_interface.V_unit",
+                "description_kind": "plain",
+                "optional": true
+              },
+              "resource_name": {
+                "type": "string",
+                "description_kind": "plain",
+                "required": true
+              }
+            },
+            "description_kind": "plain"
+          }
+        },
+        "junos-ex-interfaces_InterfacesInterfaceUnitFamilyEthernet__SwitchingVlanMembers": {
+          "version": 0,
+          "block": {
+            "attributes": {
+              "id": {
+                "type": "string",
+                "description_kind": "plain",
+                "optional": true,
+                "computed": true
+              },
+              "members": {
+                "type": "string",
+                "description": "xpath is: config.Groups.V_interface.V_unit.V_vlan. Membership for this interface (name or id)",
+                "description_kind": "plain",
+                "optional": true
+              },
+              "name": {
+                "type": "string",
+                "description": "xpath is: config.Groups.V_interface",
+                "description_kind": "plain",
+                "optional": true
+              },
+              "name__1": {
+                "type": "string",
+                "description": "xpath is: config.Groups.V_interface.V_unit",
+                "description_kind": "plain",
+                "optional": true
+              },
+              "resource_name": {
+                "type": "string",
+                "description_kind": "plain",
+                "required": true
+              }
+            },
+            "description_kind": "plain"
+          }
+        },
+        "junos-ex-interfaces_commit": {
+          "version": 0,
+          "block": {
+            "attributes": {
+              "id": {
+                "type": "string",
+                "description_kind": "plain",
+                "optional": true,
+                "computed": true
+              },
+              "resource_name": {
+                "type": "string",
+                "description_kind": "plain",
+                "required": true
+              }
+            },
+            "description_kind": "plain"
+          }
+        },
+        "junos-ex-interfaces_destroycommit": {
+          "version": 0,
+          "block": {
+            "attributes": {
+              "id": {
+                "type": "string",
+                "description_kind": "plain",
+                "optional": true,
+                "computed": true
+              },
+              "resource_name": {
+                "type": "string",
+                "description_kind": "plain",
+                "required": true
+              }
+            },
+            "description_kind": "plain"
+          }
+        }
+      }
+    },
+    "registry.terraform.io/cdot65/junos-ex-mstp": {
+      "provider": {
+        "version": 0,
+        "block": {
+          "attributes": {
+            "host": {
+              "type": "string",
+              "description_kind": "plain",
+              "required": true
+            },
+            "password": {
+              "type": "string",
+              "description_kind": "plain",
+              "required": true
+            },
+            "port": {
+              "type": "number",
+              "description_kind": "plain",
+              "required": true
+            },
+            "sshkey": {
+              "type": "string",
+              "description_kind": "plain",
+              "required": true
+            },
+            "username": {
+              "type": "string",
+              "description_kind": "plain",
+              "required": true
+            }
+          },
+          "description_kind": "plain"
+        }
+      },
+      "resource_schemas": {
+        "junos-ex-mstp_ProtocolsMstpBridge__Priority": {
+          "version": 0,
+          "block": {
+            "attributes": {
+              "bridge__priority": {
+                "type": "string",
+                "description": "xpath is: config.Groups.V_mstp. Priority of the bridge (in increments of 4k - 0,4k,8k,..60k)",
+                "description_kind": "plain",
+                "optional": true
+              },
+              "id": {
+                "type": "string",
+                "description_kind": "plain",
+                "optional": true,
+                "computed": true
+              },
+              "resource_name": {
+                "type": "string",
+                "description_kind": "plain",
+                "required": true
+              }
+            },
+            "description_kind": "plain"
+          }
+        },
+        "junos-ex-mstp_ProtocolsMstpConfiguration__Name": {
+          "version": 0,
+          "block": {
+            "attributes": {
+              "configuration__name": {
+                "type": "string",
+                "description": "xpath is: config.Groups.V_mstp. Configuration name (part of MST configuration identifier)",
+                "description_kind": "plain",
+                "optional": true
+              },
+              "id": {
+                "type": "string",
+                "description_kind": "plain",
+                "optional": true,
+                "computed": true
+              },
+              "resource_name": {
+                "type": "string",
+                "description_kind": "plain",
+                "required": true
+              }
+            },
+            "description_kind": "plain"
+          }
+        },
+        "junos-ex-mstp_ProtocolsMstpInterfaceEdge": {
+          "version": 0,
+          "block": {
+            "attributes": {
+              "edge": {
+                "type": "string",
+                "description": "xpath is: config.Groups.V_interface. Port is an edge port",
+                "description_kind": "plain",
+                "optional": true
+              },
+              "id": {
+                "type": "string",
+                "description_kind": "plain",
+                "optional": true,
+                "computed": true
+              },
+              "name": {
+                "type": "string",
+                "description": "xpath is: config.Groups.V_interface",
+                "description_kind": "plain",
+                "optional": true
+              },
+              "resource_name": {
+                "type": "string",
+                "description_kind": "plain",
+                "required": true
+              }
+            },
+            "description_kind": "plain"
+          }
+        },
+        "junos-ex-mstp_ProtocolsMstpInterfaceMode": {
+          "version": 0,
+          "block": {
+            "attributes": {
+              "id": {
+                "type": "string",
+                "description_kind": "plain",
+                "optional": true,
+                "computed": true
+              },
+              "mode": {
+                "type": "string",
+                "description": "xpath is: config.Groups.V_interface. Interface mode (P2P or shared)",
+                "description_kind": "plain",
+                "optional": true
+              },
+              "name": {
+                "type": "string",
+                "description": "xpath is: config.Groups.V_interface",
+                "description_kind": "plain",
+                "optional": true
+              },
+              "resource_name": {
+                "type": "string",
+                "description_kind": "plain",
+                "required": true
+              }
+            },
+            "description_kind": "plain"
+          }
+        },
+        "junos-ex-mstp_ProtocolsMstpInterfaceName": {
+          "version": 0,
+          "block": {
+            "attributes": {
+              "id": {
+                "type": "string",
+                "description_kind": "plain",
+                "optional": true,
+                "computed": true
+              },
+              "name": {
+                "type": "string",
+                "description": "xpath is: config.Groups.V_interface. ",
+                "description_kind": "plain",
+                "optional": true
+              },
+              "resource_name": {
+                "type": "string",
+                "description_kind": "plain",
+                "required": true
+              }
+            },
+            "description_kind": "plain"
+          }
+        },
+        "junos-ex-mstp_ProtocolsMstpMstiName": {
+          "version": 0,
+          "block": {
+            "attributes": {
+              "id": {
+                "type": "string",
+                "description_kind": "plain",
+                "optional": true,
+                "computed": true
+              },
+              "name": {
+                "type": "string",
+                "description": "xpath is: config.Groups.V_msti. ",
+                "description_kind": "plain",
+                "optional": true
+              },
+              "resource_name": {
+                "type": "string",
+                "description_kind": "plain",
+                "required": true
+              }
+            },
+            "description_kind": "plain"
+          }
+        },
+        "junos-ex-mstp_ProtocolsMstpMstiVlan": {
+          "version": 0,
+          "block": {
+            "attributes": {
+              "id": {
+                "type": "string",
+                "description_kind": "plain",
+                "optional": true,
+                "computed": true
+              },
+              "name": {
+                "type": "string",
+                "description": "xpath is: config.Groups.V_msti",
+                "description_kind": "plain",
+                "optional": true
+              },
+              "resource_name": {
+                "type": "string",
+                "description_kind": "plain",
+                "required": true
+              },
+              "vlan": {
+                "type": "string",
+                "description": "xpath is: config.Groups.V_msti. VLAN ID or VLAN ID range [1..4094]",
+                "description_kind": "plain",
+                "optional": true
+              }
+            },
+            "description_kind": "plain"
+          }
+        },
+        "junos-ex-mstp_commit": {
+          "version": 0,
+          "block": {
+            "attributes": {
+              "id": {
+                "type": "string",
+                "description_kind": "plain",
+                "optional": true,
+                "computed": true
+              },
+              "resource_name": {
+                "type": "string",
+                "description_kind": "plain",
+                "required": true
+              }
+            },
+            "description_kind": "plain"
+          }
+        },
+        "junos-ex-mstp_destroycommit": {
+          "version": 0,
+          "block": {
+            "attributes": {
+              "id": {
+                "type": "string",
+                "description_kind": "plain",
+                "optional": true,
+                "computed": true
+              },
+              "resource_name": {
+                "type": "string",
+                "description_kind": "plain",
+                "required": true
+              }
+            },
+            "description_kind": "plain"
+          }
+        }
+      }
+    },
+    "registry.terraform.io/cdot65/junos-ex-vlans": {
+      "provider": {
+        "version": 0,
+        "block": {
+          "attributes": {
+            "host": {
+              "type": "string",
+              "description_kind": "plain",
+              "required": true
+            },
+            "password": {
+              "type": "string",
+              "description_kind": "plain",
+              "required": true
+            },
+            "port": {
+              "type": "number",
+              "description_kind": "plain",
+              "required": true
+            },
+            "sshkey": {
+              "type": "string",
+              "description_kind": "plain",
+              "required": true
+            },
+            "username": {
+              "type": "string",
+              "description_kind": "plain",
+              "required": true
+            }
+          },
+          "description_kind": "plain"
+        }
+      },
+      "resource_schemas": {
+        "junos-ex-vlans_VlansVlanDescription": {
+          "version": 0,
+          "block": {
+            "attributes": {
+              "description": {
+                "type": "string",
+                "description": "xpath is: config.Groups.V_vlan. Text description of VLANs",
+                "description_kind": "plain",
+                "optional": true
+              },
+              "id": {
+                "type": "string",
+                "description_kind": "plain",
+                "optional": true,
+                "computed": true
+              },
+              "name": {
+                "type": "string",
+                "description": "xpath is: config.Groups.V_vlan",
+                "description_kind": "plain",
+                "optional": true
+              },
+              "resource_name": {
+                "type": "string",
+                "description_kind": "plain",
+                "required": true
+              }
+            },
+            "description_kind": "plain"
+          }
+        },
+        "junos-ex-vlans_VlansVlanL3__Interface": {
+          "version": 0,
+          "block": {
+            "attributes": {
+              "id": {
+                "type": "string",
+                "description_kind": "plain",
+                "optional": true,
+                "computed": true
+              },
+              "l3__interface": {
+                "type": "string",
+                "description": "xpath is: config.Groups.V_vlan. L3 interface name for this vlans",
+                "description_kind": "plain",
+                "optional": true
+              },
+              "name": {
+                "type": "string",
+                "description": "xpath is: config.Groups.V_vlan",
+                "description_kind": "plain",
+                "optional": true
+              },
+              "resource_name": {
+                "type": "string",
+                "description_kind": "plain",
+                "required": true
+              }
+            },
+            "description_kind": "plain"
+          }
+        },
+        "junos-ex-vlans_VlansVlanVlan__Id": {
+          "version": 0,
+          "block": {
+            "attributes": {
+              "id": {
+                "type": "string",
+                "description_kind": "plain",
+                "optional": true,
+                "computed": true
+              },
+              "name": {
+                "type": "string",
+                "description": "xpath is: config.Groups.V_vlan",
+                "description_kind": "plain",
+                "optional": true
+              },
+              "resource_name": {
+                "type": "string",
+                "description_kind": "plain",
+                "required": true
+              },
+              "vlan__id": {
+                "type": "string",
+                "description": "xpath is: config.Groups.V_vlan. IEEE 802.1q VLAN identifier for VLAN",
+                "description_kind": "plain",
+                "optional": true
+              }
+            },
+            "description_kind": "plain"
+          }
+        },
+        "junos-ex-vlans_commit": {
+          "version": 0,
+          "block": {
+            "attributes": {
+              "id": {
+                "type": "string",
+                "description_kind": "plain",
+                "optional": true,
+                "computed": true
+              },
+              "resource_name": {
+                "type": "string",
+                "description_kind": "plain",
+                "required": true
+              }
+            },
+            "description_kind": "plain"
+          }
+        },
+        "junos-ex-vlans_destroycommit": {
+          "version": 0,
+          "block": {
+            "attributes": {
+              "id": {
+                "type": "string",
+                "description_kind": "plain",
+                "optional": true,
+                "computed": true
+              },
+              "resource_name": {
+                "type": "string",
+                "description_kind": "plain",
+                "required": true
+              }
+            },
+            "description_kind": "plain"
+          }
+        }
+      }
+    }
+  }
+}

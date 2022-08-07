@@ -1,0 +1,13 @@
+image: docker:latest
+
+services:
+  - docker:dind
+
+build:
+  stage: build
+  script:
+    - cd files
+    - echo "DOCKER BUILD STARTING NOW"
+    - docker build -t test -f ./blueChip-Dockerfile .
+    - docker build -t test -f ./blueChip-api-Dockerfile .
+    - echo "DOCKER BUILD COMPLETED"

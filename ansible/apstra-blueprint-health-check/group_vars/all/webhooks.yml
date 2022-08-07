@@ -1,0 +1,5 @@
+---
+slack:
+  base_url: "hooks.slack.com/services"
+  channel:
+    apstra: "abcd123/abcd123/abcd123"

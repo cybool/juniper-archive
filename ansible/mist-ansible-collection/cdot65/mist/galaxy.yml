@@ -1,0 +1,24 @@
+namespace: cdot65
+name: mist
+version: 0.0.4
+readme: README.md
+authors:
+  - Calvin Remsburg <cremsburg.dev@gmail.com.com>
+description: Ansible collection for Juniper's Mist solution
+license:
+  - GPL-2.0-or-later
+license_file: ""
+tags:
+  - networking
+  - juniper
+  - mist
+  - campus
+  - wireless
+dependencies: {}
+repository: https://github.com/cdot65/mist-ansible-collection
+documentation: https://cdot65.github.io/mist-ansible-collection/
+homepage: https://cdot65.github.io/mist-ansible-collection/
+issues: https://github.com/cdot65/mist-ansible-collection/issues
+build_ignore:
+  - tests
+  - "*.tar.gz"

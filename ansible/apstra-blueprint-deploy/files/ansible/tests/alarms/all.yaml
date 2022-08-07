@@ -1,0 +1,21 @@
+tests_include:
+  - alarms
+
+### ---------------------------------------------------------------------------------
+### Check For Major or Warming Alarms
+### ---------------------------------------------------------------------------------
+alarms:
+    - command: show chassis alarms
+
+    - iterate: 
+        xpath: //alarm-information/alarm-summary
+        tests:
+          - exists: no-active-alarms
+            err: Alarms are present
+
+    - iterate: 
+        xpath: //alarm-information[alarm-detail]/alarm-detail
+        tests:
+          - not-in: alarm-class, Major, Warning
+            err: "{{ Alarm {{ post['alarm-class']}} : {{ post['alarm-description']}}"
+            ignore-null: True

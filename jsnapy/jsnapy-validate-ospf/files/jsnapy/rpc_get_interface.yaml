@@ -1,0 +1,8 @@
+rpc_interfaces_terse:
+  - rpc: get-interface-information
+  - iterate:
+      xpath: //physical-interface
+      tests:
+        - is-equal: admin-status, up
+          info: "Test Succeeded!!"
+          err: "Test Failed!!" 

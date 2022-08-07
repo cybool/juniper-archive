@@ -1,0 +1,75 @@
+---
+blocks:
+- type: header
+  text:
+    type: plain_text
+    text: ":robot_face: Juniper Apstra :robot_face:"
+
+- type: divider
+- type: context
+  elements:
+  - text: "*Austin* | Blueprint Health"
+    type: mrkdwn
+
+- type: divider
+
+- type: section
+  text:
+    type: mrkdwn
+    text: ":paperclip: *Attributes*"
+
+- type: section
+  text:
+    type: mrkdwn
+    text: |-
+      :white_small_square: Design: *two_stage_l3clos*
+      :white_small_square: External routers: *0*
+      :white_small_square: Spine switches: *2*
+      :white_small_square: Leaf switches: *4*
+      :white_small_square: Servers: *8*
+      :white_small_square: Status: *created*
+
+  accessory:
+    type: image
+    image_url: https://gitlab.com/_calvinr/brand-logos/-/raw/master/apstra_0.3x.png
+    alt_text: Apstra
+
+- type: divider
+
+- type: section
+  text:
+    type: mrkdwn
+    text: ":round_pushpin: *Overall Health*"
+
+- type: section
+  text:
+    type: mrkdwn
+    text: |-
+      :white_small_square: :x: *Austin* 
+
+
+- type: section
+  text:
+    type: mrkdwn
+    text: ":spiral_note_pad: *Anomalies*"
+
+- type: section
+  text:
+    type: mrkdwn
+    text: |-
+      :white_small_square: :white_check_mark: ARP: *0* 
+      :white_small_square: :x: BGP: *8* 
+      :white_small_square: :x: Cabling: *4* 
+      :white_small_square: :white_check_mark: Config: *0* 
+      :white_small_square: :white_check_mark: Counter: *0* 
+      :white_small_square: :white_check_mark: Deployment: *0* 
+      :white_small_square: :white_check_mark: Hostname: *0* 
+      :white_small_square: :x: Interface: *4* 
+      :white_small_square: :white_check_mark: LAG: *0* 
+      :white_small_square: :white_check_mark: Liveness: *0* 
+      :white_small_square: :white_check_mark: MAC: *0* 
+      :white_small_square: :white_check_mark: MLAG: *0* 
+      :white_small_square: :white_check_mark: Probe: *0* 
+      :white_small_square: :x: Route: *24* 
+      :white_small_square: :white_check_mark: Series: *0* 
+      :white_small_square: :white_check_mark: Streaming: *0* 

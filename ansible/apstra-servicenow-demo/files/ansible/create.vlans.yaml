@@ -1,0 +1,148 @@
+---
+### #################################################################
+### # CREATE VLAN
+### #################################################################
+- hosts: localhost
+  gather_facts: False
+  become: False
+  connection: local
+  tasks:
+    ### #################################################################
+    ### # AUTHENTICATE AND RECEIVE AN API TOKEN FROM THE APSTRA SERVER
+    ### #################################################################
+    - name: retrieve an API token for our session
+      ansible.builtin.uri:
+        url: "https://{{ apstra.base_url }}/api/user/login"
+        method: POST
+        headers:
+          Content-Type: application/json
+        status_code: 201
+        validate_certs: False
+        body_format: json
+        body:
+          username: "{{ apstra.username }}"
+          password: "{{ apstra.password }}"
+      register: api_token
+
+    - name: create 'api_token' object by setting it equal to value in response
+      ansible.builtin.set_fact:
+        api_token: "{{ api_token.json.token }}"
+
+    ### #################################################################
+    ### # FIND SYSTEM IDs FOR LEAF SWITCHES
+    ### #################################################################
+    - name: retrieve all leaf devices
+      ansible.builtin.uri:
+        url: "https://{{ apstra.base_url }}/api/blueprints/evpn-vqfx_offbox-virtual/qe"
+        method: POST
+        headers:
+          Content-Type: application/json
+          AuthToken: "{{ api_token }}"
+        status_code: 200
+        validate_certs: False
+        body_format: json
+        body:
+          query: "match(node('system', name='leaf', role='leaf'))"
+      register: leaf_system_ids
+
+    - name: Create an object 'leafs' and set it to the output of our cleanup
+      ansible.builtin.set_fact:
+        leafs: "{{ leaf_system_ids.json | cleanup_leaf_ids }}"
+
+    - name: retrieve all routing instances
+      ansible.builtin.uri:
+        url: "https://{{ apstra.base_url }}/api/blueprints/evpn-vqfx_offbox-virtual/qe"
+        method: POST
+        headers:
+          Content-Type: application/json
+          AuthToken: "{{ api_token }}"
+        status_code: 200
+        validate_certs: False
+        body_format: json
+        body:
+          query: "match(node('security_zone', name='security_zone', label='{{ routing_instance }}'))"
+      register: security_zone_instance
+
+    - name: Create an object 'routing_instance' and set it to the output
+      ansible.builtin.set_fact:
+        security_zone: "{{ security_zone_instance.json | cleanup_security_zone }}"
+
+    - name: retrieve all redundancy groups
+      ansible.builtin.uri:
+        url: "https://{{ apstra.base_url }}/api/blueprints/evpn-vqfx_offbox-virtual/qe"
+        method: POST
+        headers:
+          Content-Type: application/json
+          AuthToken: "{{ api_token }}"
+        status_code: 200
+        validate_certs: False
+        body_format: json
+        body:
+          query: "node('redundancy_group', name='esi')"
+      register: redundancy_group
+
+    - name: Create an object 'redundancy_group' and set it to the output
+      ansible.builtin.set_fact:
+        redundancy_group_id: "{{ redundancy_group.json | cleanup_redundancy_group }}"
+
+    # #################################################
+    # ### VLAN Work
+    # #################################################
+    - name: Cleanup VLAN name
+      ansible.builtin.set_fact:
+        vlan_name_clean: "{{ vlan_name | cleanup_vlan_name }}"
+
+    - name: "### Create VLAN"
+      ansible.builtin.uri:
+        url: "https://{{ apstra.base_url }}/api/blueprints/{{ blueprint_name }}/virtual-networks-batch"
+        validate_certs: False
+        headers:
+          AuthToken: "{{ api_token }}"
+        return_content: False
+        status_code: 201
+        method: POST
+        body:
+          virtual_networks:
+            - virtual_gateway_ipv4_enabled: true
+              vn_id: "{{ vni | string }}"
+              vn_type: vxlan
+              svi_ips:
+                - system_id: "{{ leafs.leaf1.id }}"
+                  ipv4_mode: enabled
+                  ipv4_addr: null
+                  ipv6_mode: disabled
+                  ipv6_addr: null
+                - system_id: "{{ leafs.leaf2.id }}"
+                  ipv4_mode: enabled
+                  ipv4_addr: null
+                  ipv6_mode: disabled
+                  ipv6_addr: null
+                - system_id: "{{ leafs.leaf3.id }}"
+                  ipv4_mode: enabled
+                  ipv4_addr: null
+                  ipv6_mode: disabled
+                  ipv6_addr: null
+              virtual_gateway_ipv4: "{{ default_gateway_ip }}"
+              ipv6_subnet: null
+              bound_to:
+                - system_id: "{{ redundancy_group_id.id }}"
+                  access_switch_node_ids: []
+                  vlan_id: "{{ vlan_id }}"
+                - system_id: "{{ leafs.leaf3.id }}"
+                  access_switch_node_ids: []
+                  vlan_id: "{{ vlan_id }}"
+              vni_ids:
+                - "{{ vni }}"
+              virtual_gateway_ipv6: null
+              ipv4_subnet: "{{ ip_prefix_of_vlan }}"
+              rt_policy:
+                import_RTs: null
+                export_RTs: null
+              label: "{{ vlan_name_clean | lower }}"
+              ipv4_enabled: true
+              virtual_gateway_ipv6_enabled: false
+              ipv6_enabled: false
+              security_zone_id: "{{ security_zone.id }}"
+              dhcp_service: dhcpServiceDisabled
+              create_policy_tagged: true
+        body_format: json

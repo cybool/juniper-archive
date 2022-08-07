@@ -1,0 +1,58 @@
+---
+### #################################################################
+### # CREATE GATEWAY PLAY
+### #################################################################
+- hosts: localhost
+  gather_facts: False
+  become: False
+  tasks:
+    ### #################################################################
+    ### # CREATE GATEWAY TASK
+    ### #################################################################
+    - name: "create a gateway configuration"
+      cdot65.mist.gateway:
+        name: "Houston-fw1"
+        site_name: "Houston"
+        bgp_config:
+          - name: "ATT"
+            type: "external"
+            local_as: 42551
+            auth_key: "juniper123"
+            export_policy: "direct"
+            neighbors:
+              - name: "74.51.192.0"
+                neighbor_as: 42550
+                export_policy: "direct"
+                import_policy: ""
+        # notes: "this is a test"
+        routing_policies:
+          - name: "direct"
+            terms:
+              - prefix: "10.0.0.0/8"
+                network: "Guest"
+                as_path: 0
+                protocol: "direct"
+                then: "accept"
+              - prefix: "10.0.0.0/8"
+                network: "IoT"
+                as_path: 0
+                protocol: "direct"
+                then: "accept"
+              - prefix: "10.0.0.0/8"
+                network: "Corporate"
+                as_path: 0
+                protocol: "direct"
+                then: "accept"
+        # service_policies:
+        #   - name: "Corporate-Internet"
+        #     tenants:
+        #       - "Corporate"
+        #     services:
+        #       - "Corporate_Service"
+        #     action: "allow"
+        #     path_preference: "Internet"
+        additional_config_cmds:
+          - "set protocols bgp group ATT local-address 74.51.192.1"
+
+        state: "present"
+      register: result

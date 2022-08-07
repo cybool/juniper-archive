@@ -1,0 +1,13 @@
+ansible
+ansible-tower-cli
+jsnapy
+junos-eznc
+jxmlease
+lxml
+ncclient
+prettytable
+PyYAML
+regex
+requests
+urllib3
+xmltodict

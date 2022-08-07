@@ -1,0 +1,15 @@
+# ########################################################
+# ### FILES AND DIRECTORIES
+# ########################################################
+slack:
+    blueprint:
+        template: "templates/apstra.j2"
+        slack_msg: "/var/tmp/{{ name_of_blueprint | lower }}_apstra.yaml"
+
+    root_cause:
+        template: "templates/root_cause.j2"
+        slack_msg: "output/root_cause_{{ name_of_blueprint }}.yaml"
+
+    blueprint_health:
+        template: "templates/blueprint_health.j2"
+        slack_msg: "output/blueprint_health_{{ name_of_blueprint }}.yaml"

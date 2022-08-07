@@ -1,0 +1,115 @@
+configuration:
+  interfaces:
+    interface:
+      # ### PHYSICAL INTERFACES
+      - name: xe-0/0/0
+        description: "[xe-0/0/0] to pod1-spine1"
+        mtu: "9192"
+        unit:
+          name: "0"
+          family:
+            inet:
+              address:
+                name: "10.255.255.1/31"
+
+      - name: xe-0/0/1
+        description: "[xe-0/0/1] to pod1-spine2"
+        mtu: "9192"
+        unit:
+          name: "0"
+          family:
+            inet:
+              address:
+                name: "10.255.255.3/31"
+
+      # - name: xe-0/0/8
+      #   description: "[xe-0/0/9] to server3"
+      #   ether_options:
+      #     ieee_802.3ad:
+      #       bundle: ae1
+
+      # - name: xe-0/0/9
+      #   description: "[xe-0/0/9] to server3"
+      #   unit:
+      #     - name: "0"
+      #       family:
+      #         ethernet_switching:
+      #           interface_mode: access
+      #           vlan:
+      #             members:
+      #               - vlan_103 
+
+      # - name: xe-0/0/10
+      #   description: "[xe-0/0/10] to server2"
+      #   unit:
+      #     - name: "0"
+      #       family:
+      #         ethernet_switching:
+      #           interface_mode: access
+      #           vlan:
+      #             members:
+      #               - vlan_102 
+
+      - name: xe-0/0/11
+        description: "[xe-0/0/11] to server1"
+        unit:
+          - name: "0"
+            family:
+              ethernet_switching:
+                interface_mode: access
+                vlan:
+                  members:
+                    - vlan_101 
+
+      # ### AE INTERFACES
+      # - name: ae1
+      #   description: "[xe-0/0/8] to server8"
+      #   mtu: "9192"
+      #   aggregated_ether_options:
+      #     lacp:
+      #       active: null
+      #       periodic: slow
+      #       system_id: 00:40:00:00:00:01
+      #   esi:
+      #     all_active: null
+      #     identifier: 00:11:11:11:11:11:11:11:01:01
+      #   unit:
+      #     - name: "0"
+      #       family:
+      #         ethernet_switching:
+      #           interface_mode: access
+      #           vlan:
+      #             members:
+      #               - vlan_101 
+
+      # ### MGMT INTERFACE
+      - name: em0
+        unit:
+          name: "0"
+          description: "out of band interface"
+          family:
+            inet:
+              address:
+                name: "{{ ansible_host }}/24"
+                # arp:
+                #   - name: "192.168.43.1"
+                #     mac: "f4:a7:39:1b:d4:9b"
+
+      # ### vQFX PFE INTERFACE
+      - name: em1
+        unit:
+          name: "0"
+          family:
+            inet:
+              address:
+                name: "169.254.0.2/24"
+
+      # ### LOOPBACK INTERFACES
+      - name: lo0
+        unit:
+          - name: "0"
+            description: loopback
+            family:
+              inet:
+                address:
+                  name: "{{ device.lo0.ipv4 }}/32"

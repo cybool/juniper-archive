@@ -1,0 +1,15 @@
+tests_include:
+  - check_evpn_mac_address1
+
+### ---------------------------------------------------------------------------------
+### Assert that MAC addresses are found across EVPN database
+### ---------------------------------------------------------------------------------
+check_evpn_mac_address1:
+  - command: show route evpn-mac-address 50:00:00:0d:00:00 table bgp.evpn.0
+
+  - item:
+      xpath: '//rt-destination[normalize-space()='2:10.255.2.0:65534::10001::50:00:00:0d:00:00']'
+      tests:
+        - exists: rt-entry
+          err: derps
+

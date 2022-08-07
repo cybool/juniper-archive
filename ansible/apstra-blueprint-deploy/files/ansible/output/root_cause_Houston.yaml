@@ -1,0 +1,35 @@
+---
+
+blocks:
+- type: header
+  text:
+    type: plain_text
+    text: ":robot_face: Apstra :robot_face:"
+
+- type: divider
+- type: context
+  elements:
+  - text: "Apstra Root Cause Analysis Bot"
+    type: mrkdwn
+
+- type: divider
+
+- type: section
+  text:
+    type: mrkdwn
+    text: |-
+      :clipboard: Root cause of issues at *Houston* data center
+        :white_small_square: No problems; *Houston* data center network is operating as intended
+  accessory:
+    type: image
+    image_url: https://gitlab.com/_calvinr/brand-logos/-/raw/master/apstra_0.3x.png
+    alt_text: Apstra
+
+- type: divider
+
+- type: section
+  text:
+    type: mrkdwn
+    text: |-
+      :round_pushpin: Link to more information on this Root Cause Analysis
+      https://apstra.dmz.home/#/blueprints/8470b421-e1ba-4a76-9769-85c19dff0050/active/arca/0d54d4b5-9a0b-4bba-9e44-5f18b077ac8c

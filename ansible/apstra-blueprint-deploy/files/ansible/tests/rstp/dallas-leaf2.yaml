@@ -1,0 +1,17 @@
+tests_include:
+  - check_root_id
+
+### ---------------------------------------------------------------------------------
+### Check spanning-tree bridge information 
+### ---------------------------------------------------------------------------------
+check_root_id:
+  - rpc: get-stp-bridge-information
+
+  - iterate:
+      xpath: '//stp-bridge/cist-bridge-parameters'
+      tests:
+        - is-equal: root-bridge/bridge-mac, 02:05:86:71:93:02
+          err: STP root bridge role is owned by {{post['bridge-mac']}}, had expected 02:05:86:71:93:02
+
+        - is-equal: root-bridge/bridge-priority, 0
+          err: Bridge priority is {{post['internal-root-cost']}}, had expected 0

@@ -1,0 +1,16 @@
+tests_include:
+  - check_firewall_nat
+
+### ---------------------------------------------------------------------------------
+### Assert that no firewall policies have 0 for a counter
+### ---------------------------------------------------------------------------------
+check_firewall_nat:
+  - command: show security nat source rule all
+
+  - iterate:
+      id: rule-name
+      xpath: //source-nat-rule-entry
+      tests:
+        - not-equal: source-nat-rule-hits-entry/rule-translation-hits, 0
+          info: Find security NAT policies with less than 1 matches
+          err: NAT policy {{post['rule-name']}} has zero matches

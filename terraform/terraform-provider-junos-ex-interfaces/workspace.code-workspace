@@ -1,0 +1,14 @@
+{
+  "folders": [
+    {
+      "path": "../jtaf-build"
+    },
+    {
+      "path": "../juniper-terraform-ex-switch"
+    },
+    {
+      "path": "../terraform-provider-junos-ex-mstp"
+    }
+  ],
+  "settings": {}
+}

@@ -1,0 +1,3 @@
+js/blue-chip/node_modules/**/*
+js/blue-chip-api/node_modules/**/*
+npm-debug.log

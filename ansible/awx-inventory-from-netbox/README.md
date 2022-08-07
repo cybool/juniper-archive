@@ -1,0 +1,1 @@
+# awx-inventory-from-netbox

@@ -1,0 +1,33 @@
+configuration:
+  protocols:
+
+    bgp:
+      group:
+
+        # ### OVERLAY
+        - name: "EVPN_FABRIC"
+          type: internal
+          local_address: "{{ device.lo0.ipv4 }}"
+          family:
+            evpn:
+              signaling: null
+          neighbor:
+            - description: "pod1-spine1"
+              name: 192.168.0.1
+            - description: "pod1-spine2"
+              name: 192.168.0.2
+          # export: "reject-type5"
+          multipath: null
+
+    evpn:
+      encapsulation: "vxlan"
+      extended_vni_list:
+        - "5101"
+        - "5102"
+        - "5103"
+
+    # igmp_snooping:
+    #   vlan:
+    #     - name: "vlan_1"
+    #       interface: "ae11.0"
+    #       multicast_router_interface: null

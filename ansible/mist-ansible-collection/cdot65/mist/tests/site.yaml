@@ -1,0 +1,28 @@
+---
+### #################################################################
+### # CREATE SITE PLAY
+### #################################################################
+- hosts: localhost
+  gather_facts: False
+  become: False
+  tasks:
+    ### #################################################################
+    ### # CREATE SITE TASK
+    ### #################################################################
+    - name: "create a gateway configuration"
+      cdot65.mist.site:
+        name: "Austin"
+        address: "1822 S Congress Ave, Austin, TX 78704, USA"
+        country_code: "US"
+        latlng:
+          lat: 30.2454688
+          lng: -97.7537742
+        notes: "Deployed from Ansible"
+        org_id: "16c40b02-523a-414b-9e1e-1651519c747d"
+        sitegroups:
+          - "breweries"
+        timeout: 30
+        timezone: "America/Chicago"
+        state: "present"
+
+      register: result

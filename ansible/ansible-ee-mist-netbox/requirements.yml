@@ -1,0 +1,6 @@
+---
+collections:
+  - name: netbox.netbox
+    version: 3.3.0
+  - name: cdot65.mist
+    version: 0.0.4

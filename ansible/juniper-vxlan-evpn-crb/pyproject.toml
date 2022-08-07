@@ -1,0 +1,22 @@
+[tool.poetry]
+name = "juniper-vxlan-evpn-crb"
+version = "0.1.0"
+description = "Ansible playbook to manage lifecycle of data center"
+authors = ["Calvin Remsburg <cremsburg.dev@gmail.com>"]
+license = "Apache 2.0"
+
+[tool.poetry.dependencies]
+python = "^3.8"
+ansible = "^6.0.0"
+junos-eznc = "^2.6.4"
+jxmlease = "^1.0.3"
+xmltodict = "^0.13.0"
+invoke = "^1.7.1"
+
+[tool.poetry.dev-dependencies]
+black = "^22.6.0"
+flake8 = "^4.0.1"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"

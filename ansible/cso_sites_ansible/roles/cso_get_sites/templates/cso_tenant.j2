@@ -1,0 +1,32 @@
+{
+  "query": {
+    "bool": {
+      "must": [
+        {
+          "term": {
+            "tenant._raw": "{{ cso.tenant_id }}"
+          }
+        },
+        {
+          "range": {
+            "start_time": {
+              "from": 1588844523.31
+            }
+          }
+        }
+      ]
+    }
+  },
+  "aggs": {
+    "events_over_time": {
+      "histogram": {
+        "field": "start_time._raw",
+        "interval": 300,
+        "extended_bounds": {
+          "min": 1573488988.536,
+          "max": 1573596188.536
+        }
+      }
+    }
+  }
+}

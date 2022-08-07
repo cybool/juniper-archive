@@ -1,0 +1,98 @@
+--- ###------------------------------------------------------------------------
+###------------------------------------------------------------------------
+### RETRIEVE SECURITY SESSION FLOWS BY ZONE
+- hosts: "all"
+  connection: local
+  gather_facts: False
+  become: False
+  collections:
+    - juniper.device
+  tasks:
+    - name: "### RETRIEVE SECURITY ZONE INFORMATION ###"
+      block:
+        - name: "retrieve security zone information"
+          rpc:
+            rpcs:
+              - "get-zones-information"
+          register: zone_information
+
+        # - name: "Execute RPC with filters"
+        #   rpc:
+        #     rpcs:
+        #       - "get-zones-information"
+        #     format: xml
+        #     filter: <configuration><groups><name>re0</name></groups></configuration>
+        #     attr: name=re0
+        #   register: test1
+        #   ignore_errors: True
+
+    - name: "### MAP INTERFACES TO NEW LIST OBJECTS ###"
+      block:
+        - name: "map zone DMZ interfaces"
+          ansible.builtin.set_fact:
+            zone_ifaces: "{{ zone_information['parsed_output'] | get_zone_interfaces  }}"
+
+    - name: "### RETRIEVE SECURITY FLOWS PER INTERFACE ###"
+      block:
+        - name: "retrieve security flows per DMZ interface"
+          rpc:
+            rpcs:
+              - "get-flow-session-information"
+            kwargs:
+              interface: "{{ item }}"
+              summary: null
+          loop: "{{ zone_ifaces['dmz_interfaces'] }}"
+          register: flows_dmz
+
+        - name: "run through build_report filter plugin"
+          ansible.builtin.set_fact:
+            flows_dmz: "{{ flows_dmz['results'] | build_report }}"
+
+        - name: "retrieve security flows per WAN interface"
+          rpc:
+            rpcs:
+              - "get-flow-session-information"
+            kwargs:
+              interface: "{{ item }}"
+              summary: null
+          loop: "{{ zone_ifaces['wan_interfaces'] }}"
+          register: flows_wan
+
+        - name: "run through build_report filter plugin"
+          ansible.builtin.set_fact:
+            flows_wan: "{{ flows_wan['results'] | build_report }}"
+
+        - name: "retrieve security flows per LAN interface"
+          rpc:
+            rpcs:
+              - "get-flow-session-information"
+            kwargs:
+              interface: "{{ item }}"
+              summary: null
+          loop: "{{ zone_ifaces['lan_interfaces'] }}"
+          register: flows_lan
+
+        - name: "run through build_report filter plugin"
+          ansible.builtin.set_fact:
+            flows_lan: "{{ flows_lan['results'] | build_report }}"
+
+    - name: Slack - Notify team
+      block:
+        - name: "Slack: create YAML file for notification"
+          ansible.builtin.template:
+            src: "templates/slack.j2"
+            dest: "tmp/slack.yaml"
+            mode: 0640
+
+        - name: "Set Firewall Channel"
+          ansible.builtin.set_fact:
+            firewall_channel: "abcd123/B036GHK2N01/iZNIlidLJK9CBLTIGBh9Wspa"
+
+        - name: "Slack: post slack message"
+          ansible.builtin.uri:
+            url: "https://hooks.slack.com/services/{{ firewall_channel }}"
+            return_content: yes
+            status_code: 200
+            method: POST
+            body: "{{ lookup('file', 'tmp/slack.yaml' ) | from_yaml | to_json }}"
+            body_format: json

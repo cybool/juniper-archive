@@ -1,0 +1,9 @@
+configuration:
+  policy_options:
+    policy_statement:
+      - name: ecmp_policy
+        term:
+          - name: 10
+            then:
+              load_balance: per-packet
+              accept: null

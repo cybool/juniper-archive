@@ -1,0 +1,36 @@
+---
+
+blocks:
+- type: header
+  text:
+    type: plain_text
+    text: ":robot_face: Apstra :robot_face:"
+
+- type: divider
+- type: context
+  elements:
+  - text: "Apstra Root Cause Analysis Bot"
+    type: mrkdwn
+
+- type: divider
+
+- type: section
+  text:
+    type: mrkdwn
+    text: |-
+      :clipboard: Root cause of issues at *Austin* data center
+        :white_small_square: Disconnected between spine2 and austin-rack-001-leaf2
+        :white_small_square: Disconnected between spine1 and austin-rack-001-leaf2
+  accessory:
+    type: image
+    image_url: https://gitlab.com/_calvinr/brand-logos/-/raw/master/apstra_0.3x.png
+    alt_text: Apstra
+
+- type: divider
+
+- type: section
+  text:
+    type: mrkdwn
+    text: |-
+      :round_pushpin: Link to more information on this Root Cause Analysis
+      https://apstra.dmz.home/#/blueprints/16f881a1-036e-4653-ae57-09307a3d6869/active/arca/818f9bc9-320a-414b-88ce-d49937e51d1f

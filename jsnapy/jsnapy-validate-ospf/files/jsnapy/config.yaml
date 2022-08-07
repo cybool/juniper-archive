@@ -1,0 +1,8 @@
+hosts:
+  - device: 192.168.110.11
+    username: root
+    passwd: juniper123
+tests:
+ - rpc_get_interface.yaml
+ - cli_get_interface.yaml
+

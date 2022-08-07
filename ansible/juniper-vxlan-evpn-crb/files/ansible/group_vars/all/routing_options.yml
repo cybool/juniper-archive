@@ -1,0 +1,24 @@
+configuration:
+  routing_options:
+    static:
+      route:
+        - name: 10.255.0.0/17
+          next_hop:
+            - 192.168.43.1
+          no_readvertise: null
+        - name: 10.6.5.0/24
+          next_hop:
+            - 192.168.43.1
+          no_readvertise: null
+        - name: 10.6.6.0/24
+          next_hop:
+            - 192.168.43.1
+          no_readvertise: null
+        - name: 10.9.0.0/16
+          next_hop:
+            - 192.168.43.1
+          no_readvertise: null
+        - name: 0.0.0.0/0
+          next_hop:
+            - 192.168.43.1
+          no_readvertise: null

@@ -1,0 +1,42 @@
+#jinja2: lstrip_blocks: "True (or False)", trim_blocks: "True (or False)"
+---
+
+blocks:
+- type: header
+  text:
+    type: plain_text
+    text: ":robot_face: Apstra :robot_face:"
+
+- type: divider
+- type: context
+  elements:
+  - text: "Apstra Root Cause Analysis Bot"
+    type: mrkdwn
+
+- type: divider
+
+- type: section
+  text:
+    type: mrkdwn
+    text: |-
+      :clipboard: Root cause of issues at *{{ name_of_blueprint }}* data center
+        {% if root_cause_info | length > 0 %}
+        {% for each in root_cause_info %}
+        :white_small_square: {{ each }}
+        {% endfor %}
+        {% else %}
+        :white_small_square: No problems; *{{ name_of_blueprint }}* data center network is operating as intended
+        {% endif %}
+  accessory:
+    type: image
+    image_url: https://gitlab.com/_calvinr/brand-logos/-/raw/master/apstra_0.3x.png
+    alt_text: Apstra
+
+- type: divider
+
+- type: section
+  text:
+    type: mrkdwn
+    text: |-
+      :round_pushpin: Link to more information on this Root Cause Analysis
+      https://apstra.dmz.home/#/blueprints/{{ blueprint_information['blueprint_id'] }}/active/arca/{{ root_causes }}

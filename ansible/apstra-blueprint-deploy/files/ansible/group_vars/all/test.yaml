@@ -1,0 +1,13 @@
+name_of_blueprint: "Spring Campus"
+data_center_site: "Spring Campus"
+spine_platform: "Juniper_vQFX_Spine"
+leaf_platform: "Juniper_vQFX_Leaf"
+spine_loopback_pool: 192.168.101.0/24
+fabric_underlay_pool: 172.20.12.0/24
+leaf_loopback_pool: 192.168.102.0/24
+spine_asn_pool: 65000-65049
+leaf_asn_pool: 65050-65099
+vni_pool: 10000-10999
+rack_type: rack_type_one_leaf
+number_of_racks: 2
+number_of_spine_switches: 2

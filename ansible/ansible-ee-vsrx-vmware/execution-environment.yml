@@ -1,0 +1,12 @@
+---
+version: 1
+dependencies:
+  galaxy: requirements.yml
+  python: requirements.txt
+additional_build_steps:
+  prepend: |
+    RUN pip3 install --upgrade pip setuptools
+  append:
+    - RUN ls -la /etc
+    - RUN pip3 install pyVmomi>=6.7
+    - RUN pip3 install git+https://github.com/vmware/vsphere-automation-sdk-python.git

@@ -1,0 +1,18 @@
+---
+routers:
+  - name: "redtail_rack_001_leaf1"
+    ip: "192.168.110.71"
+  - name: "redtail_rack_001_leaf2"
+    ip: "192.168.110.72"
+  - name: "redtail_rack_001_access1"
+    ip: "192.168.110.81"
+  - name: "redtail_rack_001_access2"
+    ip: "192.168.110.82"
+  - name: "redtail_rack_001_access3"
+    ip: "192.168.110.83"
+  - name: "redtail_rack_001_access4"
+    ip: "192.168.110.84"
+  - name: "redtail_rack_001_access5"
+    ip: "192.168.110.85"
+  - name: "redtail_rack_001_access6"
+    ip: "192.168.110.86"

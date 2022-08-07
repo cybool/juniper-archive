@@ -1,0 +1,70 @@
+---
+### ---------------------------------------------------------------------------
+### VALIDATE THAT ANSIBLE CONTROL MACHINE IS RUNNING A RECENT ANSIBLE VERSION
+### ---------------------------------------------------------------------------
+- hosts: all
+  connection: local
+  gather_facts: False
+  become: False
+  tasks:
+    - name: "Check ansible version >=2.7.8"
+      assert:
+        msg: "Ansible must be v2.7.8 or higher"
+        that:
+          - ansible_version.string is version("2.7.8", ">=")
+      tags:
+        - check
+  run_once: True
+
+### ---------------------------------------------------------------------------
+### REMOVE AND RECREATE BUILD DIRECTORIES
+### ---------------------------------------------------------------------------
+- hosts: all
+  connection: local
+  gather_facts: False
+  roles:
+    - { role: build_directories }
+
+### ---------------------------------------------------------------------------
+### BUILD CONFIGURATION IN PIECES AND ASSEMBLE INTO SINGLE CONFIG FILE
+### ---------------------------------------------------------------------------
+- hosts: all
+  connection: local
+  any_errors_fatal: "{{ any_errors_fatal | default(true) }}"
+  gather_facts: False
+  roles:
+    - { role: configuration/build/version }
+    - { role: configuration/build/apply_groups }
+    - { role: configuration/build/groups }
+    - { role: configuration/build/system }
+    # - { role: configuration/build/event_options, when: "'switch' in device.role" }
+    - { role: configuration/build/chassis }
+    # - { role: configuration/build/services, when: "'firewall' in device.role" }
+    # - { role: configuration/build/security, when: "'firewall' in device.role" }
+    - { role: configuration/build/interfaces }
+    - { role: configuration/build/snmp }
+    - { role: configuration/build/forwarding_options }
+    - { role: configuration/build/routing_instances }
+    - { role: configuration/build/routing_options }
+    - { role: configuration/build/protocols }
+    - { role: configuration/build/policy_options }
+    - { role: configuration/build/class_of_service }
+    - { role: configuration/build/firewall }
+    - { role: configuration/build/switch_options }
+    - { role: configuration/build/poe }
+    # - { role: configuration/build/virtual_chassis, when: "'virtual_chassis' in device.role" }
+    - { role: configuration/build/access }
+    - { role: configuration/build/vlans }
+    - { role: configuration/assemble }
+### ---------------------------------------------------------------------------
+### DEBUGGING A GENERATED CONFIGURATION
+### ---------------------------------------------------------------------------
+
+# - hosts: leaf1
+#   connection: local
+#   gather_facts: False
+#   tasks:
+#     - name: display multiple file contents
+#       debug: var=item
+#       with_file:
+#         - "{{ completed_config_file }}"

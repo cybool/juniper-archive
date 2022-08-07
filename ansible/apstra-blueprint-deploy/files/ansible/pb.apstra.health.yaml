@@ -1,0 +1,185 @@
+---
+### ---------------------------------------------------------------------------
+### RETRIEVE ROUTING TABLE FROM DEVICE
+### ---------------------------------------------------------------------------
+  - hosts: localhost
+    connection: local
+    gather_facts: False
+    become: False
+    tasks:
+      ### ---------------------------------------------------------------------------
+      ### ALL: RETRIEVE BLUEPRINT INFO AND GET AN API TOKEN FOR APSTRA
+      ### ---------------------------------------------------------------------------
+      - name: "### REQUEST LIST OF BLUEPRINTS FROM Nautobot"
+        uri:
+          url: "https://{{ nautobot.base_url }}/plugins/juniper-apstra/blueprints/"
+          validate_certs: no
+          headers:
+            Content-Type: application/json
+            Authorization: "Token {{ nautobot.token }}"
+          method: GET
+          return_content: yes
+          status_code: 200
+        register: list_of_blueprints
+
+      # - name: "### PRINT THE RESULT TO CONSOLE ###"
+      #   debug:
+      #     msg: "{{ list_of_blueprints }}"
+
+      - name: "### SET THE nautobot_blueprints TO THE OUTPUT RECEIVED ABOVE"
+        set_fact:
+          nautobot_blueprints: "{{ list_of_blueprints.json.results }}"
+
+      # - name: "### PRINT THE RESULT TO CONSOLE ###"
+      #   debug:
+      #     msg: "{{ nautobot_blueprints }}"
+
+      - name: "### FILTER THROUGH THE OUTPUT AND FIND OUR BLUEPRINT ID BY name_of_blueprint ###"
+        set_fact:
+          blueprint_information: "{{ nautobot_blueprints | find_site_blueprint(name_of_blueprint) }}"
+
+      # - name: "### PRINT THE RESULT TO CONSOLE ###"
+      #   debug:
+      #     msg: "{{ blueprint_information['blueprint_id'] }}"
+
+      - name: "### REQUEST API TOKEN FROM Apstra"
+        uri:
+          url: "https://{{ apstra.base_url }}/aaa/login"
+          return_content: yes
+          status_code: 201
+          method: POST
+          body: 
+            username: "{{ apstra.username }}"
+            password: "{{ apstra.password }}"
+          body_format: json
+          validate_certs: no
+        register: output_token
+
+      # - name: "### PRINT THE RESULT TO CONSOLE ###"
+      #   debug:
+      #     msg: "{{ output_token.json.accessToken }}"
+
+      - name: "### SET THE api_token TO THE OUTPUT RECEIVED ABOVE"
+        set_fact:
+          api_token: "{{ output_token.json.token }}"
+
+      ### ---------------------------------------------------------------------------
+      ### ROOT CAUSE ANALYSIS
+      ### ---------------------------------------------------------------------------
+      - name: "### ROOT CAUSE ANALYSIS"
+        block:
+          ### APSTRA: GET LIST OF ROOT CAUSES
+          - name: "### RETRIEVE ROOT CAUSES"
+            uri:
+              url: "https://{{ apstra.base_url }}/blueprints/{{ blueprint_information['blueprint_id'] }}/arca"
+              return_content: yes
+              status_code: 200
+              method: GET
+              body_format: json
+              validate_certs: no
+              headers:
+                AuthToken: "{{ api_token }}"
+            register: list_of_arca
+
+          # - name: "### PRINT THE RESULT TO CONSOLE ###"
+          #   debug:
+          #     msg: "{{ list_of_arca }}"
+
+          - name: "### FILTER OUT BY CONNECTIVITY ROOT CAUSE"
+            set_fact:
+              root_causes: "{{ list_of_arca['json']['items'][0]['id'] }}"
+
+          # - name: "### PRINT THE RESULT TO CONSOLE ###"
+          #   debug:
+          #     msg: "{{ root_causes }}"
+
+          ### APSTRA: GET SPECIFIC ROOT CAUSE
+          - name: "### RETRIEVE ROOT CAUSE INFORMATION"
+            uri:
+              url: "https://{{ apstra.base_url }}/blueprints/{{ blueprint_information['blueprint_id'] }}/arca/{{ root_causes }}"
+              return_content: yes
+              status_code: 200
+              method: GET
+              body_format: json
+              validate_certs: no
+              headers:
+                AuthToken: "{{ api_token }}"
+            register: root_cause_information
+
+          # - name: "### PRINT THE RESULT TO CONSOLE ###"
+          #   debug:
+          #     msg: "{{ root_cause_information }}"
+
+          - name: "### FILTER OUT RESPONSE BY ROOT CAUSE"
+            set_fact:
+              root_cause_info: "{{ root_cause_information['json']['root_causes'] | retrieve_root_cause_info() }}"
+
+          # - name: "### PRINT THE RESULT TO CONSOLE ###"
+          #   debug:
+          #     msg: "{{ root_cause_info }}"
+
+          - name: "### CREATE YAML PAYLOAD WITH ROOT CAUSE"
+            template:
+              src: "{{ slack.root_cause.template }}"
+              dest: "{{ slack.root_cause.slack_msg }}"
+              mode: 0640
+
+          - name: "### POST Slack MESSAGE"
+            uri:
+              url: "https://{{ slack.base_url }}/{{ slack.channel.apstra }}"
+              return_content: yes
+              status_code: 200
+              method: POST
+              body: "{{ lookup('file', slack.root_cause.slack_msg ) | from_yaml | to_json }}"
+              body_format: json
+
+        when: request_type == "ROOT_CAUSE_ANALYSIS"
+        ignore_errors: True
+
+      ### ---------------------------------------------------------------------------
+      ### BLUEPRINT HEALTH
+      ### ---------------------------------------------------------------------------
+      - name: "### BLUEPRINT HEALTH"
+        block:
+          ### APSTRA: GET LIST OF ROOT CAUSES
+          - name: "### RETRIEVE BLUEPRINT HEALTH"
+            uri:
+              url: "https://{{ apstra.base_url }}/blueprints"
+              return_content: yes
+              status_code: 200
+              method: GET
+              body_format: json
+              validate_certs: no
+              headers:
+                AuthToken: "{{ api_token }}"
+            register: output_blueprint_health
+
+          # - name: "### PRINT THE RESULT TO CONSOLE ###"
+          #   debug:
+          #     msg: "{{ output_blueprint_health }}"
+
+          - name: "### FILTER OUT RESPONSE BY LABLE OF BLUEPRINT"
+            set_fact:
+              blueprint_health: "{{ output_blueprint_health['json']['items'] | filter_blueprints(blueprint_name) }}"
+
+          # - name: "### PRINT THE RESULT TO CONSOLE ###"
+          #   debug:
+          #     msg: "{{ blueprint_health }}"
+
+          - name: "### CREATE A YAML PAYLOAD WITH DEVICE DETAILS"
+            template:
+              src: "{{ slack.blueprint_health.template }}"
+              dest: "{{ slack.blueprint_health.slack_msg }}"
+              mode: 0640
+
+          - name: "### POST SLACK MESSAGE"
+            uri:
+              url: "https://{{ slack.base_url }}/{{ slack.channel.apstra }}"
+              return_content: yes
+              status_code: 200
+              method: POST
+              body: "{{ lookup('file', slack.blueprint_health.slack_msg ) | from_yaml | to_json }}"
+              body_format: json
+
+        when: request_type == "HEALTH_OF_BLUEPRINT"
+        ignore_errors: True

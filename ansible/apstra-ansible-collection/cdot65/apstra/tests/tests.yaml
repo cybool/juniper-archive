@@ -1,0 +1,2368 @@
+---
+### #################################################################
+### # CREATE BLUEPRINT PLAY
+### #################################################################
+- hosts: localhost
+  gather_facts: False
+  become: False
+  connection: local
+  tasks:
+    ### #################################################################
+    ### # AUTHENTICATE AND RECEIVE AN API TOKEN FROM THE APSTRA SERVER
+    ### #################################################################
+    - name: retrieve an API token for our session
+      ansible.builtin.uri:
+        url: "https://{{ apstra_server }}/api/user/login"
+        method: POST
+        headers:
+          Content-Type: application/json
+        status_code: 201
+        validate_certs: False
+        body_format: json
+        body:
+          username: "{{ apstra_user }}"
+          password: "{{ apstra_password }}"
+      register: api_token
+
+    - name: create 'api_token' object by setting it equal to value in response
+      ansible.builtin.set_fact:
+        api_token: "{{ api_token.json.token }}"
+
+    ### #################################################################
+    ### # CREATE BLUEPRINT
+    ### #################################################################
+    - name: "create rack type Redtail_EVPN_Uni"
+      cdot65.apstra.design:
+        # apstra server parameters
+        server: "{{ apstra_server }}"
+        api_token: "{{ api_token }}"
+
+        # request
+        type: "rack-types"
+        id: "Redtail_EVPN_Uni"
+        display_name: "Redtail_EVPN_Uni"
+        description: "Single switch for devices not needing HA"
+        fabric_connectivity_design: "l3clos"
+        access_switches: []
+        generic_systems:
+          - tags: []
+            loopback: disabled
+            asn_domain: disabled
+            port_channel_id_max: 0
+            label: single-server
+            count: 4
+            management_level: unmanaged
+            logical_device: AOS-1x10-1
+            links:
+              - tags: []
+                attachment_type: singleAttached
+                link_speed:
+                  unit: G
+                  value: 10
+                leaf_peer: null
+                target_switch_label: EVPN_Single
+                link_per_switch_count: 1
+                label: single-link
+                lag_mode: null
+            port_channel_id_min: 0
+        leafs:
+          - tags: []
+            link_per_spine_count: 1
+            redundancy_protocol: null
+            leaf_leaf_link_speed: null
+            leaf_leaf_l3_link_count: 0
+            leaf_leaf_l3_link_speed: null
+            link_per_spine_speed:
+              unit: G
+              value: 10
+            label: EVPN_Single
+            leaf_leaf_l3_link_port_channel_id: 0
+            leaf_leaf_link_port_channel_id: 0
+            logical_device: Redtail_vQFX
+            leaf_leaf_link_count: 0
+        logical_devices:
+          - panels:
+              - panel_layout:
+                  row_count: 1
+                  column_count: 12
+                port_indexing:
+                  order: "T-B, L-R"
+                  start_index: 1
+                  schema: absolute
+                port_groups:
+                  - count: 12
+                    speed:
+                      unit: G
+                      value: 10
+                    roles:
+                      - superspine
+                      - leaf
+                      - generic
+                      - peer
+                      - access
+                      - spine
+            display_name: Redtail_vQFX
+            id: Redtail_vQFX
+          - panels:
+              - panel_layout:
+                  row_count: 1
+                  column_count: 1
+                port_indexing:
+                  order: "T-B, L-R"
+                  start_index: 1
+                  schema: absolute
+                port_groups:
+                  - count: 1
+                    speed:
+                      unit: G
+                      value: 10
+                    roles:
+                      - leaf
+                      - access
+            display_name: AOS-1x10-1
+            id: AOS-1x10-1
+          - panels:
+              - panel_layout:
+                  row_count: 1
+                  column_count: 12
+                port_indexing:
+                  order: "T-B, L-R"
+                  start_index: 1
+                  schema: absolute
+                port_groups:
+                  - count: 12
+                    speed:
+                      unit: G
+                      value: 10
+                    roles:
+                      - superspine
+                      - leaf
+                      - generic
+                      - peer
+                      - access
+                      - spine
+            display_name: Redtail_vQFX
+            id: Redtail_vQFX
+          - panels:
+              - panel_layout:
+                  row_count: 1
+                  column_count: 1
+                port_indexing:
+                  order: "T-B, L-R"
+                  start_index: 1
+                  schema: absolute
+                port_groups:
+                  - count: 1
+                    speed:
+                      unit: G
+                      value: 10
+                    roles:
+                      - leaf
+                      - access
+            display_name: AOS-1x10-1
+            id: AOS-1x10-1
+          - panels:
+              - panel_layout:
+                  row_count: 1
+                  column_count: 12
+                port_indexing:
+                  order: "T-B, L-R"
+                  start_index: 1
+                  schema: absolute
+                port_groups:
+                  - count: 12
+                    speed:
+                      unit: G
+                      value: 10
+                    roles:
+                      - superspine
+                      - leaf
+                      - generic
+                      - peer
+                      - access
+                      - spine
+            display_name: Redtail_vQFX
+            id: Redtail_vQFX
+          - panels:
+              - panel_layout:
+                  row_count: 1
+                  column_count: 1
+                port_indexing:
+                  order: "T-B, L-R"
+                  start_index: 1
+                  schema: absolute
+                port_groups:
+                  - count: 1
+                    speed:
+                      unit: G
+                      value: 10
+                    roles:
+                      - leaf
+                      - access
+            display_name: AOS-1x10-1
+            id: AOS-1x10-1
+          - panels:
+              - panel_layout:
+                  row_count: 1
+                  column_count: 12
+                port_indexing:
+                  order: "T-B, L-R"
+                  start_index: 1
+                  schema: absolute
+                port_groups:
+                  - count: 12
+                    speed:
+                      unit: G
+                      value: 10
+                    roles:
+                      - superspine
+                      - leaf
+                      - generic
+                      - peer
+                      - access
+                      - spine
+            display_name: Redtail_vQFX
+            id: Redtail_vQFX
+          - panels:
+              - panel_layout:
+                  row_count: 1
+                  column_count: 1
+                port_indexing:
+                  order: "T-B, L-R"
+                  start_index: 1
+                  schema: absolute
+                port_groups:
+                  - count: 1
+                    speed:
+                      unit: G
+                      value: 10
+                    roles:
+                      - leaf
+                      - access
+            display_name: AOS-1x10-1
+            id: AOS-1x10-1
+          - panels:
+              - panel_layout:
+                  row_count: 1
+                  column_count: 12
+                port_indexing:
+                  order: "T-B, L-R"
+                  start_index: 1
+                  schema: absolute
+                port_groups:
+                  - count: 12
+                    speed:
+                      unit: G
+                      value: 10
+                    roles:
+                      - superspine
+                      - leaf
+                      - generic
+                      - peer
+                      - access
+                      - spine
+            display_name: Redtail_vQFX
+            id: Redtail_vQFX
+          - panels:
+              - panel_layout:
+                  row_count: 1
+                  column_count: 1
+                port_indexing:
+                  order: "T-B, L-R"
+                  start_index: 1
+                  schema: absolute
+                port_groups:
+                  - count: 1
+                    speed:
+                      unit: G
+                      value: 10
+                    roles:
+                      - leaf
+                      - access
+            display_name: AOS-1x10-1
+            id: AOS-1x10-1
+          - panels:
+              - panel_layout:
+                  row_count: 1
+                  column_count: 12
+                port_indexing:
+                  order: "T-B, L-R"
+                  start_index: 1
+                  schema: absolute
+                port_groups:
+                  - count: 12
+                    speed:
+                      unit: G
+                      value: 10
+                    roles:
+                      - superspine
+                      - leaf
+                      - generic
+                      - peer
+                      - access
+                      - spine
+            display_name: Redtail_vQFX
+            id: Redtail_vQFX
+          - panels:
+              - panel_layout:
+                  row_count: 1
+                  column_count: 1
+                port_indexing:
+                  order: "T-B, L-R"
+                  start_index: 1
+                  schema: absolute
+                port_groups:
+                  - count: 1
+                    speed:
+                      unit: G
+                      value: 10
+                    roles:
+                      - leaf
+                      - access
+            display_name: AOS-1x10-1
+            id: AOS-1x10-1
+          - panels:
+              - panel_layout:
+                  row_count: 1
+                  column_count: 12
+                port_indexing:
+                  order: "T-B, L-R"
+                  start_index: 1
+                  schema: absolute
+                port_groups:
+                  - count: 12
+                    speed:
+                      unit: G
+                      value: 10
+                    roles:
+                      - superspine
+                      - leaf
+                      - generic
+                      - peer
+                      - access
+                      - spine
+            display_name: Redtail_vQFX
+            id: Redtail_vQFX
+          - panels:
+              - panel_layout:
+                  row_count: 1
+                  column_count: 1
+                port_indexing:
+                  order: "T-B, L-R"
+                  start_index: 1
+                  schema: absolute
+                port_groups:
+                  - count: 1
+                    speed:
+                      unit: G
+                      value: 10
+                    roles:
+                      - leaf
+                      - access
+            display_name: AOS-1x10-1
+            id: AOS-1x10-1
+          - panels:
+              - panel_layout:
+                  row_count: 1
+                  column_count: 12
+                port_indexing:
+                  order: "T-B, L-R"
+                  start_index: 1
+                  schema: absolute
+                port_groups:
+                  - count: 12
+                    speed:
+                      unit: G
+                      value: 10
+                    roles:
+                      - superspine
+                      - leaf
+                      - generic
+                      - peer
+                      - access
+                      - spine
+            display_name: Redtail_vQFX
+            id: Redtail_vQFX
+          - panels:
+              - panel_layout:
+                  row_count: 1
+                  column_count: 1
+                port_indexing:
+                  order: "T-B, L-R"
+                  start_index: 1
+                  schema: absolute
+                port_groups:
+                  - count: 1
+                    speed:
+                      unit: G
+                      value: 10
+                    roles:
+                      - leaf
+                      - access
+            display_name: AOS-1x10-1
+            id: AOS-1x10-1
+          - panels:
+              - panel_layout:
+                  row_count: 1
+                  column_count: 12
+                port_indexing:
+                  order: "T-B, L-R"
+                  start_index: 1
+                  schema: absolute
+                port_groups:
+                  - count: 12
+                    speed:
+                      unit: G
+                      value: 10
+                    roles:
+                      - superspine
+                      - leaf
+                      - generic
+                      - peer
+                      - access
+                      - spine
+            display_name: Redtail_vQFX
+            id: Redtail_vQFX
+          - panels:
+              - panel_layout:
+                  row_count: 1
+                  column_count: 1
+                port_indexing:
+                  order: "T-B, L-R"
+                  start_index: 1
+                  schema: absolute
+                port_groups:
+                  - count: 1
+                    speed:
+                      unit: G
+                      value: 10
+                    roles:
+                      - leaf
+                      - access
+            display_name: AOS-1x10-1
+            id: AOS-1x10-1
+          - panels:
+              - panel_layout:
+                  row_count: 1
+                  column_count: 12
+                port_indexing:
+                  order: "T-B, L-R"
+                  start_index: 1
+                  schema: absolute
+                port_groups:
+                  - count: 12
+                    speed:
+                      unit: G
+                      value: 10
+                    roles:
+                      - superspine
+                      - leaf
+                      - generic
+                      - peer
+                      - access
+                      - spine
+            display_name: Redtail_vQFX
+            id: Redtail_vQFX
+          - panels:
+              - panel_layout:
+                  row_count: 1
+                  column_count: 1
+                port_indexing:
+                  order: "T-B, L-R"
+                  start_index: 1
+                  schema: absolute
+                port_groups:
+                  - count: 1
+                    speed:
+                      unit: G
+                      value: 10
+                    roles:
+                      - leaf
+                      - access
+            display_name: AOS-1x10-1
+            id: AOS-1x10-1
+          - panels:
+              - panel_layout:
+                  row_count: 1
+                  column_count: 12
+                port_indexing:
+                  order: "T-B, L-R"
+                  start_index: 1
+                  schema: absolute
+                port_groups:
+                  - count: 12
+                    speed:
+                      unit: G
+                      value: 10
+                    roles:
+                      - superspine
+                      - leaf
+                      - generic
+                      - peer
+                      - access
+                      - spine
+            display_name: Redtail_vQFX
+            id: Redtail_vQFX
+          - panels:
+              - panel_layout:
+                  row_count: 1
+                  column_count: 1
+                port_indexing:
+                  order: "T-B, L-R"
+                  start_index: 1
+                  schema: absolute
+                port_groups:
+                  - count: 1
+                    speed:
+                      unit: G
+                      value: 10
+                    roles:
+                      - leaf
+                      - access
+            display_name: AOS-1x10-1
+            id: AOS-1x10-1
+          - panels:
+              - panel_layout:
+                  row_count: 1
+                  column_count: 12
+                port_indexing:
+                  order: "T-B, L-R"
+                  start_index: 1
+                  schema: absolute
+                port_groups:
+                  - count: 12
+                    speed:
+                      unit: G
+                      value: 10
+                    roles:
+                      - superspine
+                      - leaf
+                      - generic
+                      - peer
+                      - access
+                      - spine
+            display_name: Redtail_vQFX
+            id: Redtail_vQFX
+          - panels:
+              - panel_layout:
+                  row_count: 1
+                  column_count: 1
+                port_indexing:
+                  order: "T-B, L-R"
+                  start_index: 1
+                  schema: absolute
+                port_groups:
+                  - count: 1
+                    speed:
+                      unit: G
+                      value: 10
+                    roles:
+                      - leaf
+                      - access
+            display_name: AOS-1x10-1
+            id: AOS-1x10-1
+          - panels:
+              - panel_layout:
+                  row_count: 1
+                  column_count: 1
+                port_indexing:
+                  order: "T-B, L-R"
+                  start_index: 1
+                  schema: absolute
+                port_groups:
+                  - count: 1
+                    speed:
+                      unit: G
+                      value: 10
+                    roles:
+                      - leaf
+                      - access
+            display_name: AOS-1x10-1
+            id: AOS-1x10-1
+          - panels:
+              - panel_layout:
+                  row_count: 1
+                  column_count: 1
+                port_indexing:
+                  order: "T-B, L-R"
+                  start_index: 1
+                  schema: absolute
+                port_groups:
+                  - count: 1
+                    speed:
+                      unit: G
+                      value: 10
+                    roles:
+                      - leaf
+                      - access
+            display_name: AOS-1x10-1
+            id: AOS-1x10-1
+          - panels:
+              - panel_layout:
+                  row_count: 1
+                  column_count: 1
+                port_indexing:
+                  order: "T-B, L-R"
+                  start_index: 1
+                  schema: absolute
+                port_groups:
+                  - count: 1
+                    speed:
+                      unit: G
+                      value: 10
+                    roles:
+                      - leaf
+                      - access
+            display_name: AOS-1x10-1
+            id: AOS-1x10-1
+          - panels:
+              - panel_layout:
+                  row_count: 1
+                  column_count: 1
+                port_indexing:
+                  order: "T-B, L-R"
+                  start_index: 1
+                  schema: absolute
+                port_groups:
+                  - count: 1
+                    speed:
+                      unit: G
+                      value: 10
+                    roles:
+                      - leaf
+                      - access
+            display_name: AOS-1x10-1
+            id: AOS-1x10-1
+          - panels:
+              - panel_layout:
+                  row_count: 1
+                  column_count: 1
+                port_indexing:
+                  order: "T-B, L-R"
+                  start_index: 1
+                  schema: absolute
+                port_groups:
+                  - count: 1
+                    speed:
+                      unit: G
+                      value: 10
+                    roles:
+                      - leaf
+                      - access
+            display_name: AOS-1x10-1
+            id: AOS-1x10-1
+          - panels:
+              - panel_layout:
+                  row_count: 1
+                  column_count: 1
+                port_indexing:
+                  order: "T-B, L-R"
+                  start_index: 1
+                  schema: absolute
+                port_groups:
+                  - count: 1
+                    speed:
+                      unit: G
+                      value: 10
+                    roles:
+                      - leaf
+                      - access
+            display_name: AOS-1x10-1
+            id: AOS-1x10-1
+          - panels:
+              - panel_layout:
+                  row_count: 1
+                  column_count: 1
+                port_indexing:
+                  order: "T-B, L-R"
+                  start_index: 1
+                  schema: absolute
+                port_groups:
+                  - count: 1
+                    speed:
+                      unit: G
+                      value: 10
+                    roles:
+                      - leaf
+                      - access
+            display_name: AOS-1x10-1
+            id: AOS-1x10-1
+          - panels:
+              - panel_layout:
+                  row_count: 1
+                  column_count: 1
+                port_indexing:
+                  order: "T-B, L-R"
+                  start_index: 1
+                  schema: absolute
+                port_groups:
+                  - count: 1
+                    speed:
+                      unit: G
+                      value: 10
+                    roles:
+                      - leaf
+                      - access
+            display_name: AOS-1x10-1
+            id: AOS-1x10-1
+          - panels:
+              - panel_layout:
+                  row_count: 1
+                  column_count: 1
+                port_indexing:
+                  order: "T-B, L-R"
+                  start_index: 1
+                  schema: absolute
+                port_groups:
+                  - count: 1
+                    speed:
+                      unit: G
+                      value: 10
+                    roles:
+                      - leaf
+                      - access
+            display_name: AOS-1x10-1
+            id: AOS-1x10-1
+          - panels:
+              - panel_layout:
+                  row_count: 1
+                  column_count: 1
+                port_indexing:
+                  order: "T-B, L-R"
+                  start_index: 1
+                  schema: absolute
+                port_groups:
+                  - count: 1
+                    speed:
+                      unit: G
+                      value: 10
+                    roles:
+                      - leaf
+                      - access
+            display_name: AOS-1x10-1
+            id: AOS-1x10-1
+          - panels:
+              - panel_layout:
+                  row_count: 1
+                  column_count: 1
+                port_indexing:
+                  order: "T-B, L-R"
+                  start_index: 1
+                  schema: absolute
+                port_groups:
+                  - count: 1
+                    speed:
+                      unit: G
+                      value: 10
+                    roles:
+                      - leaf
+                      - access
+            display_name: AOS-1x10-1
+            id: AOS-1x10-1
+          - panels:
+              - panel_layout:
+                  row_count: 1
+                  column_count: 1
+                port_indexing:
+                  order: "T-B, L-R"
+                  start_index: 1
+                  schema: absolute
+                port_groups:
+                  - count: 1
+                    speed:
+                      unit: G
+                      value: 10
+                    roles:
+                      - leaf
+                      - access
+            display_name: AOS-1x10-1
+            id: AOS-1x10-1
+          - panels:
+              - panel_layout:
+                  row_count: 1
+                  column_count: 1
+                port_indexing:
+                  order: "T-B, L-R"
+                  start_index: 1
+                  schema: absolute
+                port_groups:
+                  - count: 1
+                    speed:
+                      unit: G
+                      value: 10
+                    roles:
+                      - leaf
+                      - access
+            display_name: AOS-1x10-1
+            id: AOS-1x10-1
+          - panels:
+              - panel_layout:
+                  row_count: 1
+                  column_count: 1
+                port_indexing:
+                  order: "T-B, L-R"
+                  start_index: 1
+                  schema: absolute
+                port_groups:
+                  - count: 1
+                    speed:
+                      unit: G
+                      value: 10
+                    roles:
+                      - leaf
+                      - access
+            display_name: AOS-1x10-1
+            id: AOS-1x10-1
+          - panels:
+              - panel_layout:
+                  row_count: 1
+                  column_count: 1
+                port_indexing:
+                  order: "T-B, L-R"
+                  start_index: 1
+                  schema: absolute
+                port_groups:
+                  - count: 1
+                    speed:
+                      unit: G
+                      value: 10
+                    roles:
+                      - leaf
+                      - access
+            display_name: AOS-1x10-1
+            id: AOS-1x10-1
+          - panels:
+              - panel_layout:
+                  row_count: 1
+                  column_count: 1
+                port_indexing:
+                  order: "T-B, L-R"
+                  start_index: 1
+                  schema: absolute
+                port_groups:
+                  - count: 1
+                    speed:
+                      unit: G
+                      value: 10
+                    roles:
+                      - leaf
+                      - access
+            display_name: AOS-1x10-1
+            id: AOS-1x10-1
+          - panels:
+              - panel_layout:
+                  row_count: 1
+                  column_count: 1
+                port_indexing:
+                  order: "T-B, L-R"
+                  start_index: 1
+                  schema: absolute
+                port_groups:
+                  - count: 1
+                    speed:
+                      unit: G
+                      value: 10
+                    roles:
+                      - leaf
+                      - access
+            display_name: AOS-1x10-1
+            id: AOS-1x10-1
+          - panels:
+              - panel_layout:
+                  row_count: 1
+                  column_count: 1
+                port_indexing:
+                  order: "T-B, L-R"
+                  start_index: 1
+                  schema: absolute
+                port_groups:
+                  - count: 1
+                    speed:
+                      unit: G
+                      value: 10
+                    roles:
+                      - leaf
+                      - access
+            display_name: AOS-1x10-1
+            id: AOS-1x10-1
+          - panels:
+              - panel_layout:
+                  row_count: 1
+                  column_count: 1
+                port_indexing:
+                  order: "T-B, L-R"
+                  start_index: 1
+                  schema: absolute
+                port_groups:
+                  - count: 1
+                    speed:
+                      unit: G
+                      value: 10
+                    roles:
+                      - leaf
+                      - access
+            display_name: AOS-1x10-1
+            id: AOS-1x10-1
+          - panels:
+              - panel_layout:
+                  row_count: 1
+                  column_count: 1
+                port_indexing:
+                  order: "T-B, L-R"
+                  start_index: 1
+                  schema: absolute
+                port_groups:
+                  - count: 1
+                    speed:
+                      unit: G
+                      value: 10
+                    roles:
+                      - leaf
+                      - access
+            display_name: AOS-1x10-1
+            id: AOS-1x10-1
+          - panels:
+              - panel_layout:
+                  row_count: 1
+                  column_count: 1
+                port_indexing:
+                  order: "T-B, L-R"
+                  start_index: 1
+                  schema: absolute
+                port_groups:
+                  - count: 1
+                    speed:
+                      unit: G
+                      value: 10
+                    roles:
+                      - leaf
+                      - access
+            display_name: AOS-1x10-1
+            id: AOS-1x10-1
+          - panels:
+              - panel_layout:
+                  row_count: 1
+                  column_count: 1
+                port_indexing:
+                  order: "T-B, L-R"
+                  start_index: 1
+                  schema: absolute
+                port_groups:
+                  - count: 1
+                    speed:
+                      unit: G
+                      value: 10
+                    roles:
+                      - leaf
+                      - access
+            display_name: AOS-1x10-1
+            id: AOS-1x10-1
+          - panels:
+              - panel_layout:
+                  row_count: 1
+                  column_count: 1
+                port_indexing:
+                  order: "T-B, L-R"
+                  start_index: 1
+                  schema: absolute
+                port_groups:
+                  - count: 1
+                    speed:
+                      unit: G
+                      value: 10
+                    roles:
+                      - leaf
+                      - access
+            display_name: AOS-1x10-1
+            id: AOS-1x10-1
+          - panels:
+              - panel_layout:
+                  row_count: 1
+                  column_count: 1
+                port_indexing:
+                  order: "T-B, L-R"
+                  start_index: 1
+                  schema: absolute
+                port_groups:
+                  - count: 1
+                    speed:
+                      unit: G
+                      value: 10
+                    roles:
+                      - leaf
+                      - access
+            display_name: AOS-1x10-1
+            id: AOS-1x10-1
+          - panels:
+              - panel_layout:
+                  row_count: 1
+                  column_count: 1
+                port_indexing:
+                  order: "T-B, L-R"
+                  start_index: 1
+                  schema: absolute
+                port_groups:
+                  - count: 1
+                    speed:
+                      unit: G
+                      value: 10
+                    roles:
+                      - leaf
+                      - access
+            display_name: AOS-1x10-1
+            id: AOS-1x10-1
+          - panels:
+              - panel_layout:
+                  row_count: 1
+                  column_count: 1
+                port_indexing:
+                  order: "T-B, L-R"
+                  start_index: 1
+                  schema: absolute
+                port_groups:
+                  - count: 1
+                    speed:
+                      unit: G
+                      value: 10
+                    roles:
+                      - leaf
+                      - access
+            display_name: AOS-1x10-1
+            id: AOS-1x10-1
+          - panels:
+              - panel_layout:
+                  row_count: 1
+                  column_count: 1
+                port_indexing:
+                  order: "T-B, L-R"
+                  start_index: 1
+                  schema: absolute
+                port_groups:
+                  - count: 1
+                    speed:
+                      unit: G
+                      value: 10
+                    roles:
+                      - leaf
+                      - access
+            display_name: AOS-1x10-1
+            id: AOS-1x10-1
+          - panels:
+              - panel_layout:
+                  row_count: 1
+                  column_count: 1
+                port_indexing:
+                  order: "T-B, L-R"
+                  start_index: 1
+                  schema: absolute
+                port_groups:
+                  - count: 1
+                    speed:
+                      unit: G
+                      value: 10
+                    roles:
+                      - leaf
+                      - access
+            display_name: AOS-1x10-1
+            id: AOS-1x10-1
+          - panels:
+              - panel_layout:
+                  row_count: 1
+                  column_count: 1
+                port_indexing:
+                  order: "T-B, L-R"
+                  start_index: 1
+                  schema: absolute
+                port_groups:
+                  - count: 1
+                    speed:
+                      unit: G
+                      value: 10
+                    roles:
+                      - leaf
+                      - access
+            display_name: AOS-1x10-1
+            id: AOS-1x10-1
+          - panels:
+              - panel_layout:
+                  row_count: 1
+                  column_count: 1
+                port_indexing:
+                  order: "T-B, L-R"
+                  start_index: 1
+                  schema: absolute
+                port_groups:
+                  - count: 1
+                    speed:
+                      unit: G
+                      value: 10
+                    roles:
+                      - leaf
+                      - access
+            display_name: AOS-1x10-1
+            id: AOS-1x10-1
+          - panels:
+              - panel_layout:
+                  row_count: 1
+                  column_count: 1
+                port_indexing:
+                  order: "T-B, L-R"
+                  start_index: 1
+                  schema: absolute
+                port_groups:
+                  - count: 1
+                    speed:
+                      unit: G
+                      value: 10
+                    roles:
+                      - leaf
+                      - access
+            display_name: AOS-1x10-1
+            id: AOS-1x10-1
+          - panels:
+              - panel_layout:
+                  row_count: 1
+                  column_count: 1
+                port_indexing:
+                  order: "T-B, L-R"
+                  start_index: 1
+                  schema: absolute
+                port_groups:
+                  - count: 1
+                    speed:
+                      unit: G
+                      value: 10
+                    roles:
+                      - leaf
+                      - access
+            display_name: AOS-1x10-1
+            id: AOS-1x10-1
+          - panels:
+              - panel_layout:
+                  row_count: 1
+                  column_count: 1
+                port_indexing:
+                  order: "T-B, L-R"
+                  start_index: 1
+                  schema: absolute
+                port_groups:
+                  - count: 1
+                    speed:
+                      unit: G
+                      value: 10
+                    roles:
+                      - leaf
+                      - access
+            display_name: AOS-1x10-1
+            id: AOS-1x10-1
+          - panels:
+              - panel_layout:
+                  row_count: 1
+                  column_count: 1
+                port_indexing:
+                  order: "T-B, L-R"
+                  start_index: 1
+                  schema: absolute
+                port_groups:
+                  - count: 1
+                    speed:
+                      unit: G
+                      value: 10
+                    roles:
+                      - leaf
+                      - access
+            display_name: AOS-1x10-1
+            id: AOS-1x10-1
+          - panels:
+              - panel_layout:
+                  row_count: 1
+                  column_count: 1
+                port_indexing:
+                  order: "T-B, L-R"
+                  start_index: 1
+                  schema: absolute
+                port_groups:
+                  - count: 1
+                    speed:
+                      unit: G
+                      value: 10
+                    roles:
+                      - leaf
+                      - access
+            display_name: AOS-1x10-1
+            id: AOS-1x10-1
+          - panels:
+              - panel_layout:
+                  row_count: 1
+                  column_count: 1
+                port_indexing:
+                  order: "T-B, L-R"
+                  start_index: 1
+                  schema: absolute
+                port_groups:
+                  - count: 1
+                    speed:
+                      unit: G
+                      value: 10
+                    roles:
+                      - leaf
+                      - access
+            display_name: AOS-1x10-1
+            id: AOS-1x10-1
+          - panels:
+              - panel_layout:
+                  row_count: 1
+                  column_count: 1
+                port_indexing:
+                  order: "T-B, L-R"
+                  start_index: 1
+                  schema: absolute
+                port_groups:
+                  - count: 1
+                    speed:
+                      unit: G
+                      value: 10
+                    roles:
+                      - leaf
+                      - access
+            display_name: AOS-1x10-1
+            id: AOS-1x10-1
+          - panels:
+              - panel_layout:
+                  row_count: 1
+                  column_count: 1
+                port_indexing:
+                  order: "T-B, L-R"
+                  start_index: 1
+                  schema: absolute
+                port_groups:
+                  - count: 1
+                    speed:
+                      unit: G
+                      value: 10
+                    roles:
+                      - leaf
+                      - access
+            display_name: AOS-1x10-1
+            id: AOS-1x10-1
+          - panels:
+              - panel_layout:
+                  row_count: 1
+                  column_count: 1
+                port_indexing:
+                  order: "T-B, L-R"
+                  start_index: 1
+                  schema: absolute
+                port_groups:
+                  - count: 1
+                    speed:
+                      unit: G
+                      value: 10
+                    roles:
+                      - leaf
+                      - access
+            display_name: AOS-1x10-1
+            id: AOS-1x10-1
+          - panels:
+              - panel_layout:
+                  row_count: 1
+                  column_count: 1
+                port_indexing:
+                  order: "T-B, L-R"
+                  start_index: 1
+                  schema: absolute
+                port_groups:
+                  - count: 1
+                    speed:
+                      unit: G
+                      value: 10
+                    roles:
+                      - leaf
+                      - access
+            display_name: AOS-1x10-1
+            id: AOS-1x10-1
+          - panels:
+              - panel_layout:
+                  row_count: 1
+                  column_count: 1
+                port_indexing:
+                  order: "T-B, L-R"
+                  start_index: 1
+                  schema: absolute
+                port_groups:
+                  - count: 1
+                    speed:
+                      unit: G
+                      value: 10
+                    roles:
+                      - leaf
+                      - access
+            display_name: AOS-1x10-1
+            id: AOS-1x10-1
+          - panels:
+              - panel_layout:
+                  row_count: 1
+                  column_count: 1
+                port_indexing:
+                  order: "T-B, L-R"
+                  start_index: 1
+                  schema: absolute
+                port_groups:
+                  - count: 1
+                    speed:
+                      unit: G
+                      value: 10
+                    roles:
+                      - leaf
+                      - access
+            display_name: AOS-1x10-1
+            id: AOS-1x10-1
+          - panels:
+              - panel_layout:
+                  row_count: 1
+                  column_count: 1
+                port_indexing:
+                  order: "T-B, L-R"
+                  start_index: 1
+                  schema: absolute
+                port_groups:
+                  - count: 1
+                    speed:
+                      unit: G
+                      value: 10
+                    roles:
+                      - leaf
+                      - access
+            display_name: AOS-1x10-1
+            id: AOS-1x10-1
+          - panels:
+              - panel_layout:
+                  row_count: 1
+                  column_count: 1
+                port_indexing:
+                  order: "T-B, L-R"
+                  start_index: 1
+                  schema: absolute
+                port_groups:
+                  - count: 1
+                    speed:
+                      unit: G
+                      value: 10
+                    roles:
+                      - leaf
+                      - access
+            display_name: AOS-1x10-1
+            id: AOS-1x10-1
+          - panels:
+              - panel_layout:
+                  row_count: 1
+                  column_count: 1
+                port_indexing:
+                  order: "T-B, L-R"
+                  start_index: 1
+                  schema: absolute
+                port_groups:
+                  - count: 1
+                    speed:
+                      unit: G
+                      value: 10
+                    roles:
+                      - leaf
+                      - access
+            display_name: AOS-1x10-1
+            id: AOS-1x10-1
+          - panels:
+              - panel_layout:
+                  row_count: 1
+                  column_count: 1
+                port_indexing:
+                  order: "T-B, L-R"
+                  start_index: 1
+                  schema: absolute
+                port_groups:
+                  - count: 1
+                    speed:
+                      unit: G
+                      value: 10
+                    roles:
+                      - leaf
+                      - access
+            display_name: AOS-1x10-1
+            id: AOS-1x10-1
+          - panels:
+              - panel_layout:
+                  row_count: 1
+                  column_count: 1
+                port_indexing:
+                  order: "T-B, L-R"
+                  start_index: 1
+                  schema: absolute
+                port_groups:
+                  - count: 1
+                    speed:
+                      unit: G
+                      value: 10
+                    roles:
+                      - leaf
+                      - access
+            display_name: AOS-1x10-1
+            id: AOS-1x10-1
+          - panels:
+              - panel_layout:
+                  row_count: 1
+                  column_count: 1
+                port_indexing:
+                  order: "T-B, L-R"
+                  start_index: 1
+                  schema: absolute
+                port_groups:
+                  - count: 1
+                    speed:
+                      unit: G
+                      value: 10
+                    roles:
+                      - leaf
+                      - access
+            display_name: AOS-1x10-1
+            id: AOS-1x10-1
+          - panels:
+              - panel_layout:
+                  row_count: 1
+                  column_count: 1
+                port_indexing:
+                  order: "T-B, L-R"
+                  start_index: 1
+                  schema: absolute
+                port_groups:
+                  - count: 1
+                    speed:
+                      unit: G
+                      value: 10
+                    roles:
+                      - leaf
+                      - access
+            display_name: AOS-1x10-1
+            id: AOS-1x10-1
+          - panels:
+              - panel_layout:
+                  row_count: 1
+                  column_count: 1
+                port_indexing:
+                  order: "T-B, L-R"
+                  start_index: 1
+                  schema: absolute
+                port_groups:
+                  - count: 1
+                    speed:
+                      unit: G
+                      value: 10
+                    roles:
+                      - leaf
+                      - access
+            display_name: AOS-1x10-1
+            id: AOS-1x10-1
+          - panels:
+              - panel_layout:
+                  row_count: 1
+                  column_count: 1
+                port_indexing:
+                  order: "T-B, L-R"
+                  start_index: 1
+                  schema: absolute
+                port_groups:
+                  - count: 1
+                    speed:
+                      unit: G
+                      value: 10
+                    roles:
+                      - leaf
+                      - access
+            display_name: AOS-1x10-1
+            id: AOS-1x10-1
+          - panels:
+              - panel_layout:
+                  row_count: 1
+                  column_count: 1
+                port_indexing:
+                  order: "T-B, L-R"
+                  start_index: 1
+                  schema: absolute
+                port_groups:
+                  - count: 1
+                    speed:
+                      unit: G
+                      value: 10
+                    roles:
+                      - leaf
+                      - access
+            display_name: AOS-1x10-1
+            id: AOS-1x10-1
+          - panels:
+              - panel_layout:
+                  row_count: 1
+                  column_count: 1
+                port_indexing:
+                  order: "T-B, L-R"
+                  start_index: 1
+                  schema: absolute
+                port_groups:
+                  - count: 1
+                    speed:
+                      unit: G
+                      value: 10
+                    roles:
+                      - leaf
+                      - access
+            display_name: AOS-1x10-1
+            id: AOS-1x10-1
+          - panels:
+              - panel_layout:
+                  row_count: 1
+                  column_count: 1
+                port_indexing:
+                  order: "T-B, L-R"
+                  start_index: 1
+                  schema: absolute
+                port_groups:
+                  - count: 1
+                    speed:
+                      unit: G
+                      value: 10
+                    roles:
+                      - leaf
+                      - access
+            display_name: AOS-1x10-1
+            id: AOS-1x10-1
+          - panels:
+              - panel_layout:
+                  row_count: 1
+                  column_count: 1
+                port_indexing:
+                  order: "T-B, L-R"
+                  start_index: 1
+                  schema: absolute
+                port_groups:
+                  - count: 1
+                    speed:
+                      unit: G
+                      value: 10
+                    roles:
+                      - leaf
+                      - access
+            display_name: AOS-1x10-1
+            id: AOS-1x10-1
+          - panels:
+              - panel_layout:
+                  row_count: 1
+                  column_count: 1
+                port_indexing:
+                  order: "T-B, L-R"
+                  start_index: 1
+                  schema: absolute
+                port_groups:
+                  - count: 1
+                    speed:
+                      unit: G
+                      value: 10
+                    roles:
+                      - leaf
+                      - access
+            display_name: AOS-1x10-1
+            id: AOS-1x10-1
+          - panels:
+              - panel_layout:
+                  row_count: 1
+                  column_count: 1
+                port_indexing:
+                  order: "T-B, L-R"
+                  start_index: 1
+                  schema: absolute
+                port_groups:
+                  - count: 1
+                    speed:
+                      unit: G
+                      value: 10
+                    roles:
+                      - leaf
+                      - access
+            display_name: AOS-1x10-1
+            id: AOS-1x10-1
+          - panels:
+              - panel_layout:
+                  row_count: 1
+                  column_count: 1
+                port_indexing:
+                  order: "T-B, L-R"
+                  start_index: 1
+                  schema: absolute
+                port_groups:
+                  - count: 1
+                    speed:
+                      unit: G
+                      value: 10
+                    roles:
+                      - leaf
+                      - access
+            display_name: AOS-1x10-1
+            id: AOS-1x10-1
+          - panels:
+              - panel_layout:
+                  row_count: 1
+                  column_count: 1
+                port_indexing:
+                  order: "T-B, L-R"
+                  start_index: 1
+                  schema: absolute
+                port_groups:
+                  - count: 1
+                    speed:
+                      unit: G
+                      value: 10
+                    roles:
+                      - leaf
+                      - access
+            display_name: AOS-1x10-1
+            id: AOS-1x10-1
+          - panels:
+              - panel_layout:
+                  row_count: 1
+                  column_count: 1
+                port_indexing:
+                  order: "T-B, L-R"
+                  start_index: 1
+                  schema: absolute
+                port_groups:
+                  - count: 1
+                    speed:
+                      unit: G
+                      value: 10
+                    roles:
+                      - leaf
+                      - access
+            display_name: AOS-1x10-1
+            id: AOS-1x10-1
+          - panels:
+              - panel_layout:
+                  row_count: 1
+                  column_count: 1
+                port_indexing:
+                  order: "T-B, L-R"
+                  start_index: 1
+                  schema: absolute
+                port_groups:
+                  - count: 1
+                    speed:
+                      unit: G
+                      value: 10
+                    roles:
+                      - leaf
+                      - access
+            display_name: AOS-1x10-1
+            id: AOS-1x10-1
+          - panels:
+              - panel_layout:
+                  row_count: 1
+                  column_count: 1
+                port_indexing:
+                  order: "T-B, L-R"
+                  start_index: 1
+                  schema: absolute
+                port_groups:
+                  - count: 1
+                    speed:
+                      unit: G
+                      value: 10
+                    roles:
+                      - leaf
+                      - access
+            display_name: AOS-1x10-1
+            id: AOS-1x10-1
+          - panels:
+              - panel_layout:
+                  row_count: 1
+                  column_count: 1
+                port_indexing:
+                  order: "T-B, L-R"
+                  start_index: 1
+                  schema: absolute
+                port_groups:
+                  - count: 1
+                    speed:
+                      unit: G
+                      value: 10
+                    roles:
+                      - leaf
+                      - access
+            display_name: AOS-1x10-1
+            id: AOS-1x10-1
+          - panels:
+              - panel_layout:
+                  row_count: 1
+                  column_count: 1
+                port_indexing:
+                  order: "T-B, L-R"
+                  start_index: 1
+                  schema: absolute
+                port_groups:
+                  - count: 1
+                    speed:
+                      unit: G
+                      value: 10
+                    roles:
+                      - leaf
+                      - access
+            display_name: AOS-1x10-1
+            id: AOS-1x10-1
+          - panels:
+              - panel_layout:
+                  row_count: 1
+                  column_count: 1
+                port_indexing:
+                  order: "T-B, L-R"
+                  start_index: 1
+                  schema: absolute
+                port_groups:
+                  - count: 1
+                    speed:
+                      unit: G
+                      value: 10
+                    roles:
+                      - leaf
+                      - access
+            display_name: AOS-1x10-1
+            id: AOS-1x10-1
+          - panels:
+              - panel_layout:
+                  row_count: 1
+                  column_count: 1
+                port_indexing:
+                  order: "T-B, L-R"
+                  start_index: 1
+                  schema: absolute
+                port_groups:
+                  - count: 1
+                    speed:
+                      unit: G
+                      value: 10
+                    roles:
+                      - leaf
+                      - access
+            display_name: AOS-1x10-1
+            id: AOS-1x10-1
+          - panels:
+              - panel_layout:
+                  row_count: 1
+                  column_count: 1
+                port_indexing:
+                  order: "T-B, L-R"
+                  start_index: 1
+                  schema: absolute
+                port_groups:
+                  - count: 1
+                    speed:
+                      unit: G
+                      value: 10
+                    roles:
+                      - leaf
+                      - access
+            display_name: AOS-1x10-1
+            id: AOS-1x10-1
+          - panels:
+              - panel_layout:
+                  row_count: 1
+                  column_count: 1
+                port_indexing:
+                  order: "T-B, L-R"
+                  start_index: 1
+                  schema: absolute
+                port_groups:
+                  - count: 1
+                    speed:
+                      unit: G
+                      value: 10
+                    roles:
+                      - leaf
+                      - access
+            display_name: AOS-1x10-1
+            id: AOS-1x10-1
+          - panels:
+              - panel_layout:
+                  row_count: 1
+                  column_count: 1
+                port_indexing:
+                  order: "T-B, L-R"
+                  start_index: 1
+                  schema: absolute
+                port_groups:
+                  - count: 1
+                    speed:
+                      unit: G
+                      value: 10
+                    roles:
+                      - leaf
+                      - access
+            display_name: AOS-1x10-1
+            id: AOS-1x10-1
+          - panels:
+              - panel_layout:
+                  row_count: 1
+                  column_count: 1
+                port_indexing:
+                  order: "T-B, L-R"
+                  start_index: 1
+                  schema: absolute
+                port_groups:
+                  - count: 1
+                    speed:
+                      unit: G
+                      value: 10
+                    roles:
+                      - leaf
+                      - access
+            display_name: AOS-1x10-1
+            id: AOS-1x10-1
+          - panels:
+              - panel_layout:
+                  row_count: 1
+                  column_count: 1
+                port_indexing:
+                  order: "T-B, L-R"
+                  start_index: 1
+                  schema: absolute
+                port_groups:
+                  - count: 1
+                    speed:
+                      unit: G
+                      value: 10
+                    roles:
+                      - leaf
+                      - access
+            display_name: AOS-1x10-1
+            id: AOS-1x10-1
+          - panels:
+              - panel_layout:
+                  row_count: 1
+                  column_count: 1
+                port_indexing:
+                  order: "T-B, L-R"
+                  start_index: 1
+                  schema: absolute
+                port_groups:
+                  - count: 1
+                    speed:
+                      unit: G
+                      value: 10
+                    roles:
+                      - leaf
+                      - access
+            display_name: AOS-1x10-1
+            id: AOS-1x10-1
+          - panels:
+              - panel_layout:
+                  row_count: 1
+                  column_count: 1
+                port_indexing:
+                  order: "T-B, L-R"
+                  start_index: 1
+                  schema: absolute
+                port_groups:
+                  - count: 1
+                    speed:
+                      unit: G
+                      value: 10
+                    roles:
+                      - leaf
+                      - access
+            display_name: AOS-1x10-1
+            id: AOS-1x10-1
+          - panels:
+              - panel_layout:
+                  row_count: 1
+                  column_count: 1
+                port_indexing:
+                  order: "T-B, L-R"
+                  start_index: 1
+                  schema: absolute
+                port_groups:
+                  - count: 1
+                    speed:
+                      unit: G
+                      value: 10
+                    roles:
+                      - leaf
+                      - access
+            display_name: AOS-1x10-1
+            id: AOS-1x10-1
+          - panels:
+              - panel_layout:
+                  row_count: 1
+                  column_count: 1
+                port_indexing:
+                  order: "T-B, L-R"
+                  start_index: 1
+                  schema: absolute
+                port_groups:
+                  - count: 1
+                    speed:
+                      unit: G
+                      value: 10
+                    roles:
+                      - leaf
+                      - access
+            display_name: AOS-1x10-1
+            id: AOS-1x10-1
+          - panels:
+              - panel_layout:
+                  row_count: 1
+                  column_count: 1
+                port_indexing:
+                  order: "T-B, L-R"
+                  start_index: 1
+                  schema: absolute
+                port_groups:
+                  - count: 1
+                    speed:
+                      unit: G
+                      value: 10
+                    roles:
+                      - leaf
+                      - access
+            display_name: AOS-1x10-1
+            id: AOS-1x10-1
+          - panels:
+              - panel_layout:
+                  row_count: 1
+                  column_count: 1
+                port_indexing:
+                  order: "T-B, L-R"
+                  start_index: 1
+                  schema: absolute
+                port_groups:
+                  - count: 1
+                    speed:
+                      unit: G
+                      value: 10
+                    roles:
+                      - leaf
+                      - access
+            display_name: AOS-1x10-1
+            id: AOS-1x10-1
+          - panels:
+              - panel_layout:
+                  row_count: 1
+                  column_count: 1
+                port_indexing:
+                  order: "T-B, L-R"
+                  start_index: 1
+                  schema: absolute
+                port_groups:
+                  - count: 1
+                    speed:
+                      unit: G
+                      value: 10
+                    roles:
+                      - leaf
+                      - access
+            display_name: AOS-1x10-1
+            id: AOS-1x10-1
+          - panels:
+              - panel_layout:
+                  row_count: 1
+                  column_count: 1
+                port_indexing:
+                  order: "T-B, L-R"
+                  start_index: 1
+                  schema: absolute
+                port_groups:
+                  - count: 1
+                    speed:
+                      unit: G
+                      value: 10
+                    roles:
+                      - leaf
+                      - access
+            display_name: AOS-1x10-1
+            id: AOS-1x10-1
+          - panels:
+              - panel_layout:
+                  row_count: 1
+                  column_count: 1
+                port_indexing:
+                  order: "T-B, L-R"
+                  start_index: 1
+                  schema: absolute
+                port_groups:
+                  - count: 1
+                    speed:
+                      unit: G
+                      value: 10
+                    roles:
+                      - leaf
+                      - access
+            display_name: AOS-1x10-1
+            id: AOS-1x10-1
+          - panels:
+              - panel_layout:
+                  row_count: 1
+                  column_count: 1
+                port_indexing:
+                  order: "T-B, L-R"
+                  start_index: 1
+                  schema: absolute
+                port_groups:
+                  - count: 1
+                    speed:
+                      unit: G
+                      value: 10
+                    roles:
+                      - leaf
+                      - access
+            display_name: AOS-1x10-1
+            id: AOS-1x10-1
+          - panels:
+              - panel_layout:
+                  row_count: 1
+                  column_count: 1
+                port_indexing:
+                  order: "T-B, L-R"
+                  start_index: 1
+                  schema: absolute
+                port_groups:
+                  - count: 1
+                    speed:
+                      unit: G
+                      value: 10
+                    roles:
+                      - leaf
+                      - access
+            display_name: AOS-1x10-1
+            id: AOS-1x10-1
+          - panels:
+              - panel_layout:
+                  row_count: 1
+                  column_count: 1
+                port_indexing:
+                  order: "T-B, L-R"
+                  start_index: 1
+                  schema: absolute
+                port_groups:
+                  - count: 1
+                    speed:
+                      unit: G
+                      value: 10
+                    roles:
+                      - leaf
+                      - access
+            display_name: AOS-1x10-1
+            id: AOS-1x10-1
+          - panels:
+              - panel_layout:
+                  row_count: 1
+                  column_count: 1
+                port_indexing:
+                  order: "T-B, L-R"
+                  start_index: 1
+                  schema: absolute
+                port_groups:
+                  - count: 1
+                    speed:
+                      unit: G
+                      value: 10
+                    roles:
+                      - leaf
+                      - access
+            display_name: AOS-1x10-1
+            id: AOS-1x10-1
+          - panels:
+              - panel_layout:
+                  row_count: 1
+                  column_count: 1
+                port_indexing:
+                  order: "T-B, L-R"
+                  start_index: 1
+                  schema: absolute
+                port_groups:
+                  - count: 1
+                    speed:
+                      unit: G
+                      value: 10
+                    roles:
+                      - leaf
+                      - access
+            display_name: AOS-1x10-1
+            id: AOS-1x10-1
+          - panels:
+              - panel_layout:
+                  row_count: 1
+                  column_count: 1
+                port_indexing:
+                  order: "T-B, L-R"
+                  start_index: 1
+                  schema: absolute
+                port_groups:
+                  - count: 1
+                    speed:
+                      unit: G
+                      value: 10
+                    roles:
+                      - leaf
+                      - access
+            display_name: AOS-1x10-1
+            id: AOS-1x10-1
+          - panels:
+              - panel_layout:
+                  row_count: 1
+                  column_count: 1
+                port_indexing:
+                  order: "T-B, L-R"
+                  start_index: 1
+                  schema: absolute
+                port_groups:
+                  - count: 1
+                    speed:
+                      unit: G
+                      value: 10
+                    roles:
+                      - leaf
+                      - access
+            display_name: AOS-1x10-1
+            id: AOS-1x10-1
+          - panels:
+              - panel_layout:
+                  row_count: 1
+                  column_count: 1
+                port_indexing:
+                  order: "T-B, L-R"
+                  start_index: 1
+                  schema: absolute
+                port_groups:
+                  - count: 1
+                    speed:
+                      unit: G
+                      value: 10
+                    roles:
+                      - leaf
+                      - access
+            display_name: AOS-1x10-1
+            id: AOS-1x10-1
+          - panels:
+              - panel_layout:
+                  row_count: 1
+                  column_count: 1
+                port_indexing:
+                  order: "T-B, L-R"
+                  start_index: 1
+                  schema: absolute
+                port_groups:
+                  - count: 1
+                    speed:
+                      unit: G
+                      value: 10
+                    roles:
+                      - leaf
+                      - access
+            display_name: AOS-1x10-1
+            id: AOS-1x10-1
+          - panels:
+              - panel_layout:
+                  row_count: 1
+                  column_count: 1
+                port_indexing:
+                  order: "T-B, L-R"
+                  start_index: 1
+                  schema: absolute
+                port_groups:
+                  - count: 1
+                    speed:
+                      unit: G
+                      value: 10
+                    roles:
+                      - leaf
+                      - access
+            display_name: AOS-1x10-1
+            id: AOS-1x10-1
+          - panels:
+              - panel_layout:
+                  row_count: 1
+                  column_count: 1
+                port_indexing:
+                  order: "T-B, L-R"
+                  start_index: 1
+                  schema: absolute
+                port_groups:
+                  - count: 1
+                    speed:
+                      unit: G
+                      value: 10
+                    roles:
+                      - leaf
+                      - access
+            display_name: AOS-1x10-1
+            id: AOS-1x10-1
+          - panels:
+              - panel_layout:
+                  row_count: 1
+                  column_count: 1
+                port_indexing:
+                  order: "T-B, L-R"
+                  start_index: 1
+                  schema: absolute
+                port_groups:
+                  - count: 1
+                    speed:
+                      unit: G
+                      value: 10
+                    roles:
+                      - leaf
+                      - access
+            display_name: AOS-1x10-1
+            id: AOS-1x10-1
+          - panels:
+              - panel_layout:
+                  row_count: 1
+                  column_count: 1
+                port_indexing:
+                  order: "T-B, L-R"
+                  start_index: 1
+                  schema: absolute
+                port_groups:
+                  - count: 1
+                    speed:
+                      unit: G
+                      value: 10
+                    roles:
+                      - leaf
+                      - access
+            display_name: AOS-1x10-1
+            id: AOS-1x10-1
+          - panels:
+              - panel_layout:
+                  row_count: 1
+                  column_count: 1
+                port_indexing:
+                  order: "T-B, L-R"
+                  start_index: 1
+                  schema: absolute
+                port_groups:
+                  - count: 1
+                    speed:
+                      unit: G
+                      value: 10
+                    roles:
+                      - leaf
+                      - access
+            display_name: AOS-1x10-1
+            id: AOS-1x10-1
+          - panels:
+              - panel_layout:
+                  row_count: 1
+                  column_count: 1
+                port_indexing:
+                  order: "T-B, L-R"
+                  start_index: 1
+                  schema: absolute
+                port_groups:
+                  - count: 1
+                    speed:
+                      unit: G
+                      value: 10
+                    roles:
+                      - leaf
+                      - access
+            display_name: AOS-1x10-1
+            id: AOS-1x10-1
+          - panels:
+              - panel_layout:
+                  row_count: 1
+                  column_count: 1
+                port_indexing:
+                  order: "T-B, L-R"
+                  start_index: 1
+                  schema: absolute
+                port_groups:
+                  - count: 1
+                    speed:
+                      unit: G
+                      value: 10
+                    roles:
+                      - leaf
+                      - access
+            display_name: AOS-1x10-1
+            id: AOS-1x10-1
+          - panels:
+              - panel_layout:
+                  row_count: 1
+                  column_count: 1
+                port_indexing:
+                  order: "T-B, L-R"
+                  start_index: 1
+                  schema: absolute
+                port_groups:
+                  - count: 1
+                    speed:
+                      unit: G
+                      value: 10
+                    roles:
+                      - leaf
+                      - access
+            display_name: AOS-1x10-1
+            id: AOS-1x10-1
+          - panels:
+              - panel_layout:
+                  row_count: 1
+                  column_count: 1
+                port_indexing:
+                  order: "T-B, L-R"
+                  start_index: 1
+                  schema: absolute
+                port_groups:
+                  - count: 1
+                    speed:
+                      unit: G
+                      value: 10
+                    roles:
+                      - leaf
+                      - access
+            display_name: AOS-1x10-1
+            id: AOS-1x10-1
+          - panels:
+              - panel_layout:
+                  row_count: 1
+                  column_count: 1
+                port_indexing:
+                  order: "T-B, L-R"
+                  start_index: 1
+                  schema: absolute
+                port_groups:
+                  - count: 1
+                    speed:
+                      unit: G
+                      value: 10
+                    roles:
+                      - leaf
+                      - access
+            display_name: AOS-1x10-1
+            id: AOS-1x10-1
+          - panels:
+              - panel_layout:
+                  row_count: 1
+                  column_count: 1
+                port_indexing:
+                  order: "T-B, L-R"
+                  start_index: 1
+                  schema: absolute
+                port_groups:
+                  - count: 1
+                    speed:
+                      unit: G
+                      value: 10
+                    roles:
+                      - leaf
+                      - access
+            display_name: AOS-1x10-1
+            id: AOS-1x10-1
+        servers: []
+        tags: []
+
+        # to delete or create
+        state: present

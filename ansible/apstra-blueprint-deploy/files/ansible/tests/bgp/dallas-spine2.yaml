@@ -1,0 +1,93 @@
+tests_include:
+  - check_underlay_leaf1
+  - check_underlay_leaf2
+  - check_underlay_leaf3
+  - check_underlay_leaf4
+  - check_overlay_leaf1
+  - check_overlay_leaf2
+  - check_overlay_leaf3
+  - check_overlay_leaf4
+
+### ---------------------------------------------------------------------------------
+### Assert BGP adjacencies with dallas-leaf1 for underlay and overlay are online
+### ---------------------------------------------------------------------------------
+check_underlay_leaf1:
+  - command: show bgp neighbor 172.20.1.9
+
+  - item:
+      xpath: '//bgp-information/bgp-peer'
+      tests:
+        - is-equal: peer-state, Established
+          err: Underlay to dallas-leaf1 in group {{post['peer-group']}} is in {{post['peer-state']}} State (Established expected)
+
+check_overlay_leaf1:
+  - command: show bgp neighbor 10.255.2.0
+
+  - item:
+      xpath: '//bgp-information/bgp-peer'
+      tests:
+        - is-equal: peer-state, Established
+          err: Overlay to dallas-leaf1 in group {{post['peer-group']}} is in {{post['peer-state']}} State (Established expected)
+
+### ---------------------------------------------------------------------------------
+### Assert BGP adjacencies with dallas-leaf2 for underlay and overlay are online
+### ---------------------------------------------------------------------------------
+check_underlay_leaf2:
+  - command: show bgp neighbor 172.20.1.11
+
+  - item:
+      xpath: '//bgp-information/bgp-peer'
+      tests:
+        - is-equal: peer-state, Established
+          err: Underlay to dallas-leaf2 in group {{post['peer-group']}} is in {{post['peer-state']}} State (Established expected)
+
+check_overlay_leaf2:
+  - command: show bgp neighbor 10.255.2.1
+
+  - item:
+      xpath: '//bgp-information/bgp-peer'
+      tests:
+        - is-equal: peer-state, Established
+          err: Overlay to dallas-leaf2 in group {{post['peer-group']}} is in {{post['peer-state']}} State (Established expected)
+
+### ---------------------------------------------------------------------------------
+### Assert BGP adjacencies with dallas-leaf3 for underlay and overlay are online
+### ---------------------------------------------------------------------------------
+check_underlay_leaf3:
+  - command: show bgp neighbor 172.20.1.13
+
+  - item:
+      xpath: '//bgp-information/bgp-peer'
+      tests:
+        - is-equal: peer-state, Established
+          err: Underlay to dallas-leaf3 in group {{post['peer-group']}} is in {{post['peer-state']}} State (Established expected)
+
+check_overlay_leaf3:
+  - command: show bgp neighbor 10.255.2.2
+
+  - item:
+      xpath: '//bgp-information/bgp-peer'
+      tests:
+        - is-equal: peer-state, Established
+          err: Overlay to dallas-leaf3 in group {{post['peer-group']}} is in {{post['peer-state']}} State (Established expected)
+
+### ---------------------------------------------------------------------------------
+### Assert BGP adjacencies with dallas-leaf4 for underlay and overlay are online
+### ---------------------------------------------------------------------------------
+check_underlay_leaf4:
+  - command: show bgp neighbor 172.20.1.15
+
+  - item:
+      xpath: '//bgp-information/bgp-peer'
+      tests:
+        - is-equal: peer-state, Established
+          err: Underlay to dallas-leaf4 in group {{post['peer-group']}} is in {{post['peer-state']}} State (Established expected)
+
+check_overlay_leaf4:
+  - command: show bgp neighbor 10.255.2.3
+
+  - item:
+      xpath: '//bgp-information/bgp-peer'
+      tests:
+        - is-equal: peer-state, Established
+          err: Overlay to dallas-leaf4 in group {{post['peer-group']}} is in {{post['peer-state']}} State (Established expected)

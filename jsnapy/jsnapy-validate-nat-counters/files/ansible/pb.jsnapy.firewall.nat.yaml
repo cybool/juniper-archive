@@ -1,0 +1,35 @@
+### ---------------------------------------
+### VALIDATE NAT POLICIES ARE BEING MATCHED
+### ---------------------------------------
+- hosts: all
+  connection: local
+  gather_facts: False
+  become: False
+  roles: 
+    - juniper.junos
+  tasks:
+
+    - name: "### RETRIEVE NAT COUNTERS ###"
+      block:
+
+        - name: "Request counters for NAT policies"
+          juniper_junos_jsnapy:
+            host: "{{ ansible_host }}"
+            test_files: tests/firewall.yaml
+            action: snapcheck
+          register: test_firewall
+          ignore_errors: True
+
+        - name: "print test_firewall object to screen"
+          debug:
+            msg: "{{ test_firewall }}"
+          when:
+            - "test_firewall.passPercentage != 100"
+
+    - name: "### PERFORM ASSERTIONS ###"
+      block:
+
+        - name: "ensure all tests passed"
+          ansible.builtin.assert:
+            that:
+              - "test_firewall.passPercentage == 100"

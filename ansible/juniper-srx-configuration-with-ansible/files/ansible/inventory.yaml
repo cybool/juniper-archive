@@ -1,0 +1,9 @@
+---
+all:
+  children:
+    routers:
+      hosts:
+        houston:
+          ansible_host: "192.168.110.11"
+  vars:
+    ansible_python_interpreter: "/home/cdot/.cache/pypoetry/virtualenvs/juniper-srx-configuration-with-ansible-P3G5tM3M-py3.8/bin/python"
